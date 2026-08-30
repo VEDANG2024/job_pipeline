@@ -8,6 +8,7 @@ using the rules from config.yaml:
     fail a soft filter — flagged mandatory_review instead of dropped
 """
 import re
+from safe import s
 
 ANALYST_KEYWORDS = [
     "business analyst", "data analyst", "reporting analyst",
@@ -34,7 +35,7 @@ STIPEND_PATTERN = re.compile(r"(?:\u20b9|rs\.?|inr)\s?([\d,]{4,7})", re.I)
 
 
 def classify_role(title: str, description: str) -> str:
-    text = f"{title} {description}".lower()
+    text = f"{s(title)} {s(description)}".lower()
     if any(k in text for k in ANALYST_KEYWORDS):
         return "analyst"
     if any(k in text for k in SWE_KEYWORDS):
@@ -43,7 +44,7 @@ def classify_role(title: str, description: str) -> str:
 
 
 def parse_experience(description: str):
-    text = (description or "").lower()
+    text = s(description).lower()
     if any(k in text for k in FRESHER_KEYWORDS):
         return (0, 1)
     for pat in YEARS_PATTERNS:
@@ -57,7 +58,7 @@ def parse_experience(description: str):
 
 
 def parse_location_priority(location: str, priority_aliases: list) -> str:
-    loc = (location or "").lower()
+    loc = s(location).lower()
     if any(a in loc for a in priority_aliases):
         return "ahmedabad"
     if "remote" in loc:
@@ -70,11 +71,11 @@ def parse_location_priority(location: str, priority_aliases: list) -> str:
 
 
 def is_internship(title: str) -> bool:
-    return any(k in title.lower() for k in INTERNSHIP_KEYWORDS)
+    return any(k in s(title).lower() for k in INTERNSHIP_KEYWORDS)
 
 
 def parse_stipend(description: str):
-    m = STIPEND_PATTERN.search(description or "")
+    m = STIPEND_PATTERN.search(s(description))
     if not m:
         return None
     return int(m.group(1).replace(",", ""))
@@ -126,7 +127,7 @@ def score_and_filter(job: dict, cfg: dict) -> dict:
         score += 20
     if years_max <= filters["max_years_experience"]:
         score += 20
-    if job["company"].lower() in cfg.get("_big_company_set", set()):
+    if s(job.get("company")).lower() in cfg.get("_big_company_set", set()):
         score += 10
 
     job.update({

@@ -23,6 +23,8 @@ def fetch(search_term: str, locations: list, sites: list,
               "Run: pip install python-jobspy --break-system-packages")
         return []
 
+    from safe import s
+
     all_jobs = []
     for location in locations:
         try:
@@ -41,13 +43,13 @@ def fetch(search_term: str, locations: list, sites: list,
             continue
         for _, row in df.iterrows():
             all_jobs.append({
-                "source": f"jobspy:{row.get('site', 'unknown')}",
-                "company": row.get("company", "") or "",
-                "title": row.get("title", "") or "",
-                "location": row.get("location", "") or "",
-                "url": row.get("job_url", "") or "",
-                "description": row.get("description", "") or "",
-                "posted_date": str(row.get("date_posted", "")),
-                "employment_type": row.get("job_type", "") or "",
+                "source": f"jobspy:{s(row.get('site')) or 'unknown'}",
+                "company": s(row.get("company")),
+                "title": s(row.get("title")),
+                "location": s(row.get("location")),
+                "url": s(row.get("job_url")),
+                "description": s(row.get("description")),
+                "posted_date": s(row.get("date_posted")),
+                "employment_type": s(row.get("job_type")),
             })
     return all_jobs

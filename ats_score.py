@@ -16,6 +16,7 @@ works, even with no API key configured.
 import re
 import yaml
 import os
+from safe import s
 
 TAXONOMY_PATH = os.path.join(os.path.dirname(__file__), "skills_taxonomy.yaml")
 
@@ -35,7 +36,7 @@ ALL_SKILLS = load_all_skills()
 
 
 def _find_skills(text: str) -> set[str]:
-    text = text.lower()
+    text = s(text).lower()
     found = set()
     for skill in ALL_SKILLS:
         pattern = r"(?<![a-z0-9])" + re.escape(skill) + r"(?![a-z0-9])"

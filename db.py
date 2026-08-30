@@ -7,6 +7,7 @@ import sqlite3
 import hashlib
 import os
 from datetime import datetime, timezone
+from safe import s
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "data", "jobs.db")
 
@@ -40,6 +41,7 @@ CREATE TABLE IF NOT EXISTS jobs (
 def job_id(company: str, title: str, url: str) -> str:
     """Stable dedupe key. Prefer URL; fall back to company+title if a
     source doesn't give a clean per-posting URL."""
+    url, company, title = s(url), s(company), s(title)
     key = url or f"{company}|{title}"
     return hashlib.sha256(key.strip().lower().encode()).hexdigest()[:24]
 

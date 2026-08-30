@@ -13,6 +13,7 @@ that's a small follow-on build using the Sheets API + a service account
 """
 import csv
 import os
+from safe import s
 
 LOG_PATH = os.path.join(os.path.dirname(__file__), "application_log.csv")
 
@@ -31,7 +32,7 @@ def _ensure_header():
 
 
 def brief(description: str, max_len: int = 220) -> str:
-    text = " ".join((description or "").split())
+    text = " ".join(s(description).split())
     return text[:max_len] + ("…" if len(text) > max_len else "")
 
 
