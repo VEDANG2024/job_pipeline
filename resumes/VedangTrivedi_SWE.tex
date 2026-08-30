@@ -1,0 +1,242 @@
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage{fontawesome5}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    urlcolor=blue,
+    linkcolor=blue,
+    citecolor=blue
+}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{mwe}
+\usepackage{wrapfig}
+\usepackage{tabularx}
+\usepackage{changepage}
+\usepackage{comment}
+
+\input{glyphtounicode}
+% Lato removed: its small-caps shapes (bold/medium sc) are undefined,
+% which caused Overleaf to silently substitute a different font for
+% \scshape text (the name in the header) -- inconsistent rendering.
+% Using LaTeX's default Computer Modern font instead for a consistent look.
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\footskip}{4pt} % silences the fancyhdr 'footskip too small' warning
+
+\usepackage{geometry}
+\geometry{left=1.1cm, top=0.35cm, right=1.1cm, bottom=0.35cm}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+\setlist[itemize]{itemsep=0.5pt, topsep=1pt, parsep=0pt}
+
+\titleformat{\section}{
+    \vspace{-4pt}\scshape\raggedright\normalsize
+}{}{0em}{}[\color{black}\titlerule \vspace{-4pt}]
+
+\begin{document}
+
+\newcommand{\resumeItem}[1]{
+  \item\footnotesize{
+    {#1}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{4pt}\item 
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{\small #1} & \footnotesize #2 \\ 
+      \textit{\scriptsize#3} & \textit{\scriptsize #4} \\ 
+    \end{tabular*}\vspace{-5pt}
+}
+
+\newlength{\skillhang}
+\newcommand{\listOfSkills}[2]{
+    \vspace{0.03em}
+    \settowidth{\skillhang}{\hspace{0.5em}\footnotesize\textbf{#1}: }
+    \hangindent=\skillhang
+    \hangafter=1
+    \hspace{0.5em}
+    \footnotesize
+    \textbf{#1}: {#2}
+    \\
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\footnotesize#1} & \textit{\footnotesize #2} \\
+    \end{tabular*}\vspace{-8pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \vspace{4pt}
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \footnotesize#1 & \footnotesize#2 \\
+    \end{tabular*}\vspace{-3pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-3pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.1in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\vspace{3pt}\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+\definecolor{Black}{RGB}{0, 0, 0}
+\newcommand{\seticon}[1]{\textcolor{Black}{\csname #1\endcsname}}
+
+%-------------------------------------------%
+%%%%%%  RESUME STARTS HERE  %%%%%
+
+%----------HEADING----------%
+\begin{center}
+    \textbf{\large VEDANG TRIVEDI} \\[0.15em]
+    \textit{\footnotesize Software Engineer $\vert$ Data Engineer $\vert$ Distributed Systems, Python \& ML Systems} \\[0.15em]
+    \href{mailto:trivedivedang.02@gmail.com}{\seticon{faEnvelope} \underline{\footnotesize trivedivedang.02@gmail.com}} \quad
+    \href{https://www.linkedin.com/in/vedang-trivedi-0389a91b9}{\seticon{faLinkedin} \underline{\footnotesize linkedin.com/in/vedang-trivedi-0389a91b9}} \\[0.15em]
+    \href{https://www.github.com/VEDANG2024}{\seticon{faGithub} \underline{\footnotesize github.com/VEDANG2024}} \quad
+    \seticon{faMapMarker} \footnotesize Ahmedabad, Gujarat, India
+\end{center}
+\vspace{-0.3em}
+
+%-----------SUMMARY-----------%
+\section{Profile Summary}
+\vspace{-2pt}
+\footnotesize
+Software Engineer and Data Engineer with expertise in software engineering, distributed systems, SQL-driven query optimization, and applied machine learning for systems efficiency. Designed, built, and shipped two Power Platform applications at Kraft Heinz used daily by \textbf{50+ people} across \textbf{10 towers}, engineering automation estimated to save \textbf{1,600+ hours} a year. Also builds systems-level research: an entropy-aware LLM-routing model that cuts inference cost by \textbf{78\%}, and a learned cardinality estimator for query-plan optimization.
+\normalsize
+
+\vspace{-0.55em}
+%-----------TECHNICAL SKILLS-----------%
+\section{Technical Skills}
+\listOfSkills{Languages}{C, C++, Python, SQL, JavaScript}
+\listOfSkills{Databases}{PostgreSQL, MongoDB, MySQL, Redis}
+\listOfSkills{Systems \& ML}{Distributed Systems, Query Optimization, QLoRA/PEFT Fine-Tuning, XGBoost}
+\listOfSkills{App Dev \& Automation}{Power Apps, Power Automate, Git/GitHub, Figma, LangChain}
+\listOfSkills{Data \& BI}{Power BI, Pandas/NumPy, NLTK/spaCy}
+
+\vspace{-0.55em}
+%-----------EXPERIENCE-----------%
+\section{Professional Experience}
+\resumeSubHeadingListStart
+    \resumeSubheading
+    {Kraft Heinz}{\textbf{Feb 2026 -- Present}}
+    {KHMS/AIT Intern, GCC India}{Ahmedabad, Gujarat}
+    \resumeItemListStart
+        \resumeItem{Engineered the AIT Power App end-to-end (5 screens, 20 SharePoint columns across 4 data types) after mapping the manual, email/Excel-based opportunity-tracking process, deploying a standardized 7-stage lifecycle model to \textbf{50+ users} across \textbf{10 towers}.}
+        \resumeItem{Implemented 6+ conditional logic rules (field visibility, record locking, cascading filters, form validation) and 2 automated email-notification triggers, cutting an estimated \textbf{1,130+ hours a year} of manual status-update and reporting effort.}
+        \resumeItem{Debugged and resolved \textbf{12 documented defects} through root-cause analysis across iterative build-test-fix cycles with real users, shipping the app entirely on existing Microsoft 365 licensing (Power Apps, SharePoint, Power Automate) with zero external budget.}
+        \resumeItem{Migrated Health Check data onto a governed SharePoint backend (\textbf{5 lists}) and engineered the Health Check and OpEx Survey app suite -- wizard-based flow, dependent dropdowns, submission validation -- for \textbf{50+ users} across \textbf{11 towers}, cutting submission errors to near-zero and saving an estimated \textbf{267 hours a year}. Also implemented role-based access control across the platform, adding a limited-permission tier to enforce data governance without admin bottlenecks.}
+    \resumeItemListEnd
+    \resumeSubheading
+    {Karma Technolabs}{\textbf{Jan 2024 -- Apr 2024}}
+    {Web Development Intern}{Ahmedabad, Gujarat}
+    \resumeItemListStart
+        \resumeItem{Enhanced search, filter, and upload functionality on a live CRM platform, contributing end-to-end across the development-to-deployment lifecycle.}
+    \resumeItemListEnd
+\resumeSubHeadingListEnd
+
+\vspace{-0.55em}
+%-----------PROJECTS-----------%
+\section{Projects}
+\resumeSubHeadingListStart
+
+    \resumeProjectHeading
+    {\textbf{UGAD-Lite: Uncertainty-Guided Adaptive Distillation} $|$ \emph{ML Systems}}
+    {\href{https://github.com/VEDANG2024/UGAD_major}{\faGithub}}
+    \resumeItemListStart
+        \resumeItem{Engineered an entropy-conformal router that dynamically directs queries between a large LLM (GPT-4o) and a fine-tuned Small Language Model (Phi-3-Mini via QLoRA), calibrated with conformal prediction for statistical safety guarantees.}
+        \resumeItem{Cut LLM inference cost and token usage by 78\% at a 94.8\% task success rate on GSM8K and synthetic arithmetic benchmarks, with a $<$5\% false-negative rate.}
+    \resumeItemListEnd
+
+    \resumeProjectHeading
+    {\textbf{CardEst} $|$ \emph{SQL, Query Optimization}}
+    {\href{https://github.com/VEDANG2024/ddb-project}{\faGithub}}
+    \resumeItemListStart
+        \resumeItem{Built an XGBoost-based cardinality estimator trained on the TPC-H dataset to improve query-optimizer execution-plan accuracy.}
+        \resumeItem{Cut query latency and resource usage in 70\% of evaluated cases by improving Pearson correlation and reducing median estimation error.}
+    \resumeItemListEnd
+
+    \resumeProjectHeading
+    {\textbf{Raft Census (DBFS)} $|$ \emph{Distributed Systems, Raft Consensus}}
+    {\href{https://www.github.com/VEDANG2024/ds-project}{\faGithub}}
+    \resumeItemListStart
+        \resumeItem{Built a language-agnostic, decentralized file-storage system using Raft cluster consensus (Redis + MongoDB-backed), with work-stealing task distribution to support concurrent multi-client create/read/write/delete operations with efficient search and caching.}
+    \resumeItemListEnd
+
+    \resumeProjectHeading
+    {\textbf{UML2PlantUML} $|$ \emph{LLMs, Machine Learning}}
+    {\href{https://github.com/VEDANG2024/UML2PlantUML}{\faGithub}}
+    \resumeItemListStart
+        \resumeItem{Built a small-scale, local reproduction of the approach from Sadeghi et al. (MODELS 2026, arXiv:2607.28987) for handwritten UML-to-PlantUML generation, preprocessing a dataset of activity and sequence diagram images for model training.}
+        \resumeItem{Fine-tuned and benchmarked 7 vision-language models (ViT-BART, BLIP, Flan-T5, ViT-GPT2, Pix2Struct, CLIP, MiniCPM) to generate PlantUML code from class diagram images, and deployed the trained model on Kaggle, where it has drawn numerous downloads.}
+    \resumeItemListEnd
+
+    \resumeProjectHeading
+    {\textbf{Distributed Database System} $|$ \emph{2PC, Query Optimization}}
+    {\href{https://github.com/VEDANG2024/ddb-project}{\faGithub}}
+    \resumeItemListStart
+        \resumeItem{Engineered a distributed database with a coordinator-worker topology, implementing horizontal/vertical data fragmentation and a global data dictionary for location-transparent query routing.}
+        \resumeItem{Implemented Two-Phase Commit (2PC) for multi-node transaction atomicity and semi-join query optimization, cutting cross-node bandwidth by 60--70\% and query latency by 3--4x versus centralized execution.}
+    \resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+\vspace{-0.55em}
+%-----------EDUCATION-----------%
+\section{Education}
+\resumeSubHeadingListStart
+    \resumeSubheading
+    {DA-IICT (Dhirubhai Ambani Institute of Information and Communication Technology)}{\textbf{2024 -- 2026}}
+    {M.Tech, ICT (Software Systems) $\vert$ CPI: 7.47/10}{Gandhinagar, Gujarat}
+    \resumeSubheading
+    {Gujarat Technological University}{\textbf{2020 -- 2024}}
+    {B.E., Computer Engineering $\vert$ CGPA: 7.77/10}{Ahmedabad, Gujarat}
+\resumeSubHeadingListEnd
+
+\vspace{-0.55em}
+
+%-----------POSITIONS OF RESPONSIBILITY-----------%
+\section{Positions of Responsibility}
+\resumeSubHeadingListStart
+    \resumeSubheading
+    {Teaching Assistant -- Software Engineering \& Object-Oriented Programming}{\textbf{Aug 2024 -- Present}}
+    {DA-IICT, Gandhinagar}{Gandhinagar, Gujarat}
+    \resumeItemListStart
+        \resumeItem{Conducted labs and doubt-clearing sessions of 100+ students, designed and evaluated assignments/exams, and mentored students in Software Engineering and Object-Oriented Programming.}
+    \resumeItemListEnd
+\resumeSubHeadingListEnd
+
+\vspace{-0.55em}
+%-----------ACHIEVEMENTS-----------%
+\section{Achievements}
+\vspace{-0.3em}
+\resumeItemListStart
+    \resumeItem{GATE CS 2024 qualifier.}
+\resumeItemListEnd
+%-------------------------------------------%
+\end{document}

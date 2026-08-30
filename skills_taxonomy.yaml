@@ -1,0 +1,125 @@
+# Keyword taxonomy used to (a) pull candidate skills out of a JD and
+# (b) check which of those the resume already covers.
+# This is a heuristic keyword-overlap scorer, not a real ATS engine —
+# it's meant to catch the same kind of naive keyword-matching that a
+# lot of real ATS software does, not to be a perfect proxy for any one
+# vendor's algorithm. Expand this list as you see JDs use terms it misses.
+
+business_analysis:
+  - requirements gathering
+  - process mapping
+  - business process improvement
+  - as-is to-be
+  - root cause analysis
+  - stakeholder management
+  - user acceptance testing
+  - uat
+  - client coordination
+  - process documentation
+  - six sigma
+  - business analyst
+  - data analyst
+  - mis reporting
+  - kpi
+  - dashboard
+  - reporting analyst
+  - operations analyst
+  - process analyst
+  - sop
+  - gap analysis
+  - business requirements document
+  - functional specification
+  - agile
+  - scrum
+  - jira
+  - confluence
+  - waterfall
+
+data_and_bi:
+  - sql
+  - power bi
+  - excel
+  - advanced excel
+  - vba
+  - pandas
+  - numpy
+  - tableau
+  - looker
+  - data visualization
+  - etl
+  - data warehousing
+  - data pipeline
+  - a/b testing
+  - statistics
+  - data cleaning
+  - data modeling
+
+app_dev_automation:
+  - power apps
+  - power automate
+  - sharepoint
+  - git
+  - github
+  - rpa
+  - workflow automation
+  - salesforce
+  - sap
+
+languages_and_frameworks:
+  - python
+  - javascript
+  - typescript
+  - java
+  - c++
+  - c#
+  - react
+  - react.js
+  - node.js
+  - django
+  - flask
+  - spring boot
+  - rest api
+  - graphql
+  - html
+  - css
+
+databases:
+  - postgresql
+  - mysql
+  - mongodb
+  - redis
+  - nosql
+  - database design
+
+systems_and_cloud:
+  - distributed systems
+  - system design
+  - microservices
+  - docker
+  - kubernetes
+  - ci/cd
+  - aws
+  - azure
+  - gcp
+  - cloud computing
+  - unit testing
+  - query optimization
+
+ml_and_ai:
+  - machine learning
+  - xgboost
+  - nlp
+  - llm
+  - langchain
+  - fine-tuning
+  - model training
+
+soft_skills:
+  - communication
+  - stakeholder communication
+  - problem solving
+  - leadership
+  - teamwork
+  - cross-functional collaboration
+  - documentation
+  - project coordination

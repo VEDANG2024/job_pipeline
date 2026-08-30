@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.aux
+*.log
+*.out
+# NOTE: data/jobs.db, application_log.csv, resumes/tailored/*, and
+# resumes/diffs/* are intentionally NOT ignored — the GitHub Actions
+# workflow commits them back to the repo after every run so state
+# (what's already been seen, what's been tailored) persists between
+# runs on a fresh runner. See .github/workflows/daily-job-search.yml.

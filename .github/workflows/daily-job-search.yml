@@ -1,0 +1,58 @@
+name: Daily Job Search
+
+# Runs on GitHub's free hosted runners — no server to pay for.
+# Free tier: ~2,000 Actions minutes/month on private repos (unlimited
+# on public repos). This workflow uses roughly 3-6 minutes per run;
+# twice a day is ~250 minutes/month, well inside the free quota.
+#
+# Cron times are UTC. 30 2 * * * / 30 12 * * * = 8:00 AM / 5:30 PM IST.
+# Adjust to your own timezone offset if needed.
+on:
+  schedule:
+    - cron: "30 2,12 * * *"
+  workflow_dispatch: {}   # lets you also trigger a run manually from the Actions tab
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    # Needed so this workflow can commit the updated dedup DB, logs,
+    # and tailored resumes back to the repo — that's what makes state
+    # persist between runs on a fresh, throwaway runner, and it's also
+    # what keeps the schedule itself alive (GitHub disables scheduled
+    # workflows after 60 days with zero repo activity — a successful
+    # daily commit prevents that from ever happening).
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install LaTeX (for resume compilation)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-base texlive-latex-extra \
+            texlive-fonts-recommended texlive-fonts-extra
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run the pipeline
+        env:
+          ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
+          ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python main.py
+
+      - name: Commit updated data + logs back to the repo
+        run: |
+          git config user.name "job-pipeline-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/ application_log.csv resumes/tailored/ resumes/diffs/
+          git diff --cached --quiet || git commit -m "Daily run: $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push

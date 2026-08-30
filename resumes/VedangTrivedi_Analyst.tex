@@ -1,0 +1,225 @@
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage{fontawesome5}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    urlcolor=blue,
+    linkcolor=blue,
+    citecolor=blue
+}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{mwe}
+\usepackage{wrapfig}
+\usepackage{tabularx}
+\usepackage{changepage}
+\usepackage{comment}
+
+\input{glyphtounicode}
+% Lato removed: its small-caps shapes (bold/medium sc) are undefined,
+% which caused Overleaf to silently substitute a different font for
+% \scshape text (the name in the header) -- inconsistent rendering.
+% Using LaTeX's default Computer Modern font instead for a consistent look.
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\footskip}{4pt} % silences the fancyhdr 'footskip too small' warning
+
+\usepackage{geometry}
+\geometry{left=1.1cm, top=0.35cm, right=1.1cm, bottom=0.35cm}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+\setlist[itemize]{itemsep=1pt, topsep=1pt, parsep=0pt}
+
+\titleformat{\section}{
+    \vspace{-4pt}\scshape\raggedright\normalsize
+}{}{0em}{}[\color{black}\titlerule \vspace{-4pt}]
+
+\begin{document}
+
+\newcommand{\resumeItem}[1]{
+  \item\footnotesize{
+    {#1}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{5pt}\item 
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{\small #1} & \footnotesize #2 \\ 
+      \textit{\scriptsize#3} & \textit{\scriptsize #4} \\ 
+    \end{tabular*}\vspace{-3pt}
+}
+
+\newcommand{\listOfSkills}[2]{
+    \vspace{0.03em}
+    \hangindent=0.5em
+    \hangafter=1
+    \hspace{0.5em}
+    \footnotesize
+    \textbf{#1}: {#2}
+    \\
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\footnotesize#1} & \textit{\footnotesize #2} \\
+    \end{tabular*}\vspace{-8pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \vspace{5pt}
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \footnotesize#1 & \footnotesize#2 \\
+    \end{tabular*}\vspace{-3pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-3pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.1in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\vspace{3pt}\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+\definecolor{Black}{RGB}{0, 0, 0}
+\newcommand{\seticon}[1]{\textcolor{Black}{\csname #1\endcsname}}
+
+%-------------------------------------------%
+%%%%%%  RESUME STARTS HERE  %%%%%
+
+%----------HEADING----------%
+\begin{center}
+    \textbf{\large VEDANG TRIVEDI} \\[0.15em]
+    \textit{\footnotesize Business Analyst $\vert$ Data Analyst $\vert$ Process Automation} \\[0.15em]
+    \href{mailto:trivedivedang.02@gmail.com}{\seticon{faEnvelope} \underline{\footnotesize trivedivedang.02@gmail.com}} \quad
+    \href{https://www.linkedin.com/in/vedang-trivedi-0389a91b9}{\seticon{faLinkedin} \underline{\footnotesize linkedin.com/in/vedang-trivedi-0389a91b9}} \\[0.15em]
+    \href{https://www.github.com/VEDANG2024}{\seticon{faGithub} \underline{\footnotesize github.com/VEDANG2024}} \quad
+    \seticon{faMapMarker} \footnotesize Ahmedabad, Gujarat, India
+\end{center}
+\vspace{-0.3em}
+
+%-----------SUMMARY-----------%
+\section{Profile Summary}
+\vspace{-2pt}
+\footnotesize
+Business Analyst and Data Analyst with hands-on experience in requirements gathering, process mapping, stakeholder management, and SQL-driven data analysis, backed by Power Platform development (Power Apps, Power BI, Power Automate) and Six Sigma-based root-cause analysis. Redesigned two manual, spreadsheet-and-email-driven workflows into production applications at Kraft Heinz, used daily by \textbf{50+ stakeholders} across \textbf{10+ towers} and saving an estimated \textbf{1,600+ hours} a year. Skilled in process documentation, UAT, and MIS/dashboard reporting for senior leadership.
+\normalsize
+
+\vspace{-0.5em}
+%-----------TECHNICAL SKILLS-----------%
+\section{Technical Skills}
+\listOfSkills{Business Analysis}{Requirements Gathering, Process Mapping, Business Process Improvement, As-Is/To-Be Workflow Redesign, Root Cause Analysis, Stakeholder Management, UAT, Client Coordination, Process Documentation, Six Sigma}
+\listOfSkills{Data \& BI}{SQL, Power BI, Advanced Excel, Pandas/NumPy}
+\listOfSkills{App Dev \& Automation}{Power Apps, Power Automate, SharePoint, Git/GitHub}
+\listOfSkills{Languages}{SQL, Python, JavaScript}
+\listOfSkills{Databases}{PostgreSQL, MongoDB, MySQL}
+
+\vspace{-0.5em}
+%-----------EXPERIENCE-----------%
+\section{Professional Experience}
+\resumeSubHeadingListStart
+    \resumeSubheading
+    {Kraft Heinz}{\textbf{Feb 2026 -- Present}}
+    {KHMS/AIT Intern, GCC India}{Ahmedabad, Gujarat}
+    \resumeItemListStart
+        \resumeItem{Led requirements gathering and end-to-end process analysis for the AIT opportunity-tracking process -- ideas scattered across email, WhatsApp, and personal Excel sheets with no shared taxonomy -- and redesigned it as a standardized 7-stage lifecycle (Idea through Benefit Realization) with a 3-status model and 5-level prioritization, deployed via the AIT Power App to \textbf{50+ users} across \textbf{10 towers}.}
+        \resumeItem{Automated status notifications, Rate Card lookups, and weekly MIS/leadership reporting using Power Automate, eliminating an estimated \textbf{1,130+ hours a year} of manual email and reporting effort and raising Rate Card data completion from $\sim$40\% to \textbf{100\%}.}
+        \resumeItem{Authored a User Manual, Technical Documentation, and Build Log, and drove root-cause analysis and repeated UAT cycles with real users, resolving \textbf{12 documented defects} before production rollout.}
+        \resumeItem{Migrated Health Check reporting from scattered Excel files onto a governed SharePoint data model (\textbf{5 lists}), then built the Health Check and OpEx Survey app suite for \textbf{50+ users} across \textbf{11 towers}, embedding validation rules that eliminated common submission errors and saved an estimated \textbf{267 hours a year}. Also tracked process metrics (submission compliance, Realized FTEs) through a live leaderboard and administered role-based access across the platform.}
+    \resumeItemListEnd
+    \resumeSubheading
+    {Karma Technolabs}{\textbf{Jan 2024 -- Apr 2024}}
+    {Web Development Intern}{Ahmedabad, Gujarat}
+    \resumeItemListStart
+        \resumeItem{Enhanced search, filter, and upload functionality on a live CRM platform, contributing end-to-end across the development-to-deployment lifecycle.}
+    \resumeItemListEnd
+    \resumeSubheading
+    {JS Placements and Fiscal Services}{\textbf{Feb 2022 -- Feb 2023}}
+    {Coordinator}{Ahmedabad, Gujarat}
+    \resumeItemListStart
+        \resumeItem{Coordinated research, documentation, and cross-functional communication between clients, candidates, and internal teams through a standardized recruitment pipeline.}
+    \resumeItemListEnd
+\resumeSubHeadingListEnd
+
+\vspace{-0.5em}
+%-----------PROJECTS-----------%
+\section{Projects}
+\resumeSubHeadingListStart
+
+    \resumeProjectHeading
+    {\textbf{CardEst} $|$ \emph{SQL, Query Optimization}}
+    {\href{https://github.com/VEDANG2024/ddb-project}{\faGithub}}
+    \resumeItemListStart
+        \resumeItem{Trained a meta-ensemble model (primarily XGBoost) on the TPC-H dataset to estimate query-predicate cardinality, improving Pearson correlation and cutting query latency/resource usage in \textbf{70\%} of evaluated cases.}
+    \resumeItemListEnd
+
+    \resumeProjectHeading
+    {\textbf{Hybrid Stock Market Price Prediction} $|$ \emph{Data Analytics, NLP} -- \emph{team project}}
+    {\href{https://github.com/VEDANG2024/STOCK-MARKET-ML/tree/main/Stock-Market-Prediction-main}{\faGithub}}
+    \resumeItemListStart
+        \resumeItem{Led planning and data infrastructure for a 3-person team, building an InfluxDB/Grafana pipeline and Streamlit/Flask apps combining numerical forecasting with NLTK/spaCy news-sentiment analysis.}
+    \resumeItemListEnd
+
+    \resumeProjectHeading
+    {\textbf{ERP Dashboard} $|$ \emph{React.js, Dashboard Development}}
+    {\href{https://github.com/VEDANG2024/erp-master}{\faGithub}}
+    \resumeItemListStart
+        \resumeItem{Built a simplified ERP dashboard (React.js) covering revenue/profit/traffic metrics and sales trend charts, with full-CRUD Products/Orders management modules across desktop and mobile.}
+    \resumeItemListEnd
+
+\resumeSubHeadingListEnd
+\section{Education}
+\resumeSubHeadingListStart
+    \resumeSubheading
+    {DA-IICT (Dhirubhai Ambani Institute of Information and Communication Technology)}{\textbf{2024 -- 2026}}
+    {M.Tech, ICT (Software Systems) $\vert$ CPI: 7.47/10}{Gandhinagar, Gujarat}
+    \resumeSubheading
+    {Gujarat Technological University}{\textbf{2020 -- 2024}}
+    {B.E., Computer Engineering $\vert$ CGPA: 7.77/10}{Ahmedabad, Gujarat}
+\resumeSubHeadingListEnd
+
+\vspace{-0.5em}
+
+%-----------POSITIONS OF RESPONSIBILITY-----------%
+\section{Positions of Responsibility}
+\resumeSubHeadingListStart
+    \resumeSubheading
+    {Teaching Assistant -- Software Engineering \& Object-Oriented Programming}{\textbf{Aug 2024 -- Present}}
+    {DA-IICT, Gandhinagar}{Gandhinagar, Gujarat}
+    \resumeItemListStart
+        \resumeItem{Conducted labs and doubt-clearing sessions of 100+ students, designed and evaluated assignments/exams, and mentored students in Software Engineering and Object-Oriented Programming.}
+    \resumeItemListEnd
+\resumeSubHeadingListEnd
+
+\vspace{-0.5em}
+%-----------ACHIEVEMENTS-----------%
+\section{Achievements}
+\vspace{-0.3em}
+\resumeItemListStart
+    \resumeItem{GATE CS 2024 qualifier.}
+\resumeItemListEnd
+%-------------------------------------------%
+\end{document}

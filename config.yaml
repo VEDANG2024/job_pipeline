@@ -1,0 +1,75 @@
+# ---- Resumes ----
+resumes:
+  analyst:
+    tex: "resumes/VedangTrivedi_Analyst.tex"
+    pdf: "resumes/VedangTrivedi_Analyst.pdf"
+  swe:
+    tex: "resumes/VedangTrivedi_SWE.tex"
+    pdf: "resumes/VedangTrivedi_SWE.pdf"
+
+# ---- Filters ----
+filters:
+  max_years_experience: 2          # apply to roles demanding 0-2 yrs
+  internship_min_stipend_inr: 30000
+  priority_location: "Ahmedabad"    # always swept in, regardless of other filters
+  priority_location_aliases: ["ahmedabad", "amdavad", "ahmadabad"]
+  ats_tailor_threshold: 85          # below this score, tailor.py kicks in
+
+# ---- Adzuna: PRIMARY discovery engine — NO company list needed ----
+# Adzuna aggregates postings from 30+ sources (Workday, Indeed,
+# Glassdoor, and more) and is searched by keyword + location, not by
+# company — this is what covers every company automatically without
+# you maintaining a list.
+# Free key (2 min, no cost): https://developer.adzuna.com/
+# Set ADZUNA_APP_ID and ADZUNA_APP_KEY as environment variables — see
+# README. Add/remove search rows freely; keep the total modest since
+# the free tier is ~1,000 calls/month (each row = up to
+# max_pages_per_query calls per run).
+adzuna:
+  enabled: true
+  country: "in"
+  results_per_page: 50
+  max_pages_per_query: 2
+  searches:
+    - keywords: "business analyst"
+      location: "Ahmedabad"
+    - keywords: "data analyst"
+      location: "Ahmedabad"
+    - keywords: "software engineer"
+      location: "Ahmedabad"
+    - keywords: "business analyst"
+      location: "India"
+    - keywords: "data analyst"
+      location: "India"
+    - keywords: "software engineer"
+      location: "India"
+
+# ---- Remote boards (no company list needed) ----
+remote_boards:
+  remoteok: true
+  weworkremotely:
+    - "remote-programming-jobs"
+    - "remote-business-development-jobs"
+
+# ---- Direct board search — LinkedIn / Indeed / Glassdoor / Naukri / ----
+# ---- Google, via python-jobspy. Also keyword+location based, no ----
+# ---- company list needed. Best-effort — see README for caveats. ----
+jobspy:
+  enabled: true
+  sites: ["linkedin", "indeed", "glassdoor", "naukri", "google"]
+  search_terms:
+    analyst: "business analyst OR data analyst"
+    swe: "software engineer OR SDE"
+  locations: ["Ahmedabad, Gujarat, India", "India", "Remote"]
+  results_wanted_per_query: 25
+  hours_old: 48
+
+# ---- OPTIONAL / ADVANCED — you do NOT need to fill this in. ----
+# Adzuna + JobSpy above already cover every company automatically.
+# Only add entries here if you want to explicitly pin a specific
+# company for guaranteed coverage regardless of whether Adzuna/
+# LinkedIn happen to index it (token = the slug in its careers URL:
+# boards.greenhouse.io/<token> or jobs.lever.co/<token>).
+companies:
+  greenhouse: []
+  lever: []
