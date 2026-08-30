@@ -73,3 +73,16 @@ jobspy:
 companies:
   greenhouse: []
   lever: []
+
+# ---- How much full processing happens per run ----
+# Discovery can easily surface 500+ raw matches on a broad search
+# (which is realistic — you can't personally review/apply to that many
+# in a day anyway). Every new job still gets logged either way, but
+# only the top-scoring `max_prepare_per_run` get the expensive
+# treatment: ATS detection (a network call per job) and resume
+# tailoring (a Gemini call per job below the ATS threshold). This is
+# what keeps each run fast and safely inside Gemini's free-tier rate
+# limit, no matter how many postings a broad search happens to find.
+# Raise it once you've confirmed a comfortable run time.
+pipeline:
+  max_prepare_per_run: 40

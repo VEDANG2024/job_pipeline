@@ -22,9 +22,10 @@ import yaml
 
 from db import get_conn, insert_new_jobs
 from classify import score_and_filter
-from prepare_application import prepare
+from prepare_application import prepare, log_discovered_only
 from ats_detect import detect_all, can_auto_submit, summarize
 from sources import greenhouse, lever, remoteok, wwr, jobspy_source, adzuna
+import gemini_budget
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.yaml")
 
@@ -100,6 +101,7 @@ def collect_raw_jobs(cfg) -> list:
 
 def main():
     cfg = load_config()
+    print(gemini_budget.status_banner())
     print("Collecting postings from all sources...")
     raw_jobs = collect_raw_jobs(cfg)
     print(f"Fetched {len(raw_jobs)} raw postings.")
@@ -116,23 +118,36 @@ def main():
         conn.close()
         return
 
-    print(f"{len(new_jobs)} NEW postings — detecting which ATS each one lands on...")
-    new_jobs = detect_all(new_jobs)
-    ats_breakdown = summarize(new_jobs)
-    auto_ready = sum(1 for j in new_jobs if can_auto_submit(j))
+    new_jobs.sort(key=lambda j: (-j["mandatory_review"], -j["score"]))
+
+    cap = cfg.get("pipeline", {}).get("max_prepare_per_run", 40)
+    to_prepare, to_log_only = new_jobs[:cap], new_jobs[cap:]
+
+    if to_log_only:
+        print(f"{len(new_jobs)} NEW postings — fully processing the top {len(to_prepare)} "
+              f"(ATS detection + tailoring), logging the remaining {len(to_log_only)} "
+              f"without those steps (raise pipeline.max_prepare_per_run in config.yaml for more)")
+        for j in to_log_only:
+            try:
+                log_discovered_only(j)
+            except Exception as e:
+                print(f"[log_discovered_only] failed for {j['company']} / {j['title']}: {e}")
+
+    print(f"Detecting which ATS each of the top {len(to_prepare)} lands on...")
+    to_prepare = detect_all(to_prepare)
+    ats_breakdown = summarize(to_prepare)
+    auto_ready = sum(1 for j in to_prepare if can_auto_submit(j))
     print(f"ATS breakdown: {ats_breakdown}")
     print(f"  -> {auto_ready} are Greenhouse/Lever (safe to auto-submit once that layer is built)")
-    print(f"  -> {len(new_jobs) - auto_ready} need a human click or your login (LinkedIn/Naukri/"
+    print(f"  -> {len(to_prepare) - auto_ready} need a human click or your login (LinkedIn/Naukri/"
           f"Indeed/Glassdoor/Workday/company sites) — see README for why")
 
     print("Preparing application packages...")
-    for j in new_jobs:
+    for j in to_prepare:
         try:
             prepare(j, cfg)
         except Exception as e:
             print(f"[prepare] failed for {j['company']} / {j['title']}: {e}")
-
-    new_jobs.sort(key=lambda j: (-j["mandatory_review"], -j["score"]))
 
     out_path = os.path.join(
         os.path.dirname(__file__), "data",

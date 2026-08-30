@@ -33,6 +33,28 @@ def _slug(text: str) -> str:
     return "".join(c if c.isalnum() else "_" for c in text)[:40].strip("_")
 
 
+def log_discovered_only(job: dict):
+    """For jobs beyond pipeline.max_prepare_per_run: log the discovery
+    with no ATS-detection network call and no Gemini call, so a broad
+    search never balloons runtime or API usage no matter how many raw
+    postings it finds. Uses the base resume by default."""
+    role = job.get("resume_to_use") or job.get("role_category")
+    spreadsheet_log.append_row({
+        "date": date.today().isoformat(),
+        "company": job["company"],
+        "role_title": job["title"],
+        "role_category": job.get("role_category", ""),
+        "location": job.get("location", ""),
+        "source": job.get("source", ""),
+        "ats": "",
+        "jd_brief": spreadsheet_log.brief(job.get("description", "")),
+        "matched_skills": "", "missing_skills": "",
+        "ats_score": "", "resume_variant": role, "tailored": "no",
+        "resume_file": "", "job_url": job.get("url", ""),
+        "status": "discovered_not_prepared",
+    })
+
+
 def prepare(job: dict, cfg: dict) -> dict:
     role = job.get("resume_to_use") or job.get("role_category")
     resume_cfg = cfg["resumes"].get(role)

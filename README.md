@@ -200,6 +200,15 @@ checking your filters behave the way you want:
 ```bash
 python tests/test_pipeline_offline.py
 ```
+`tests/test_nan_safety.py` and `tests/test_gemini_budget.py` are
+regression tests for the two real incidents this project has already
+hit in production (a pandas-NaN crash, and the Gemini quota/suspension
+issue) — run them after any change to `classify.py`, `db.py`,
+`ats_score.py`, `spreadsheet_log.py`, or `gemini_budget.py`:
+```bash
+python tests/test_nan_safety.py
+python tests/test_gemini_budget.py
+```
 
 ## Known limitations to expect
 - The `python-jobspy` layer (LinkedIn/Indeed/Glassdoor/Naukri/Google)
@@ -215,6 +224,54 @@ python tests/test_pipeline_offline.py
   start erroring — set the `GEMINI_MODEL` secret/env var to whatever
   https://ai.google.dev/gemini-api/docs/pricing currently lists as
   free-tier eligible.
+
+## Incident: a suspended Google Cloud project, and what changed
+
+On the first run after the Gemini fix, the pipeline hit Google's
+**daily** free-tier quota for `gemini-3.6-flash` (20 requests/day per
+project/model — tighter than the commonly-assumed per-minute limits on
+Flash models). Instead of stopping there, it kept firing a fresh
+request for every next job anyway, got `429 RESOURCE_EXHAUSTED`
+repeatedly in a tight loop, and ignored the API's own `retryDelay`
+hints. That pattern — rapid, repeated requests against an exhausted
+quota — got the Google Cloud project suspended for "repeated Terms of
+Service violations."
+
+**What changed as a result:**
+- `gemini_budget.py` — a hard, persisted daily cap (15, with headroom
+  under Google's 20). The instant a real 429 comes back, it's recorded
+  immediately and every subsequent job — this run or any run later
+  today — skips Gemini entirely without even attempting a call. This
+  makes the hammering pattern structurally impossible, not just
+  less likely. It's also **fail-safe, not fail-open**: if the budget
+  file is missing, that's treated as a legitimate first-ever run
+  (fresh budget); if the file exists but is corrupted or has an
+  implausible shape, it's treated as exhausted rather than silently
+  handing out a budget that can't be verified. Every run also prints
+  a one-line budget banner (`Gemini budget: 4/15 used today, 11
+  remaining.`) right at the top of the log, so this state is never
+  buried again.
+- `pipeline.max_prepare_per_run` (config.yaml) is now actually
+  enforced in `main.py` — only the top-scoring N new jobs get full
+  processing (ATS detection + tailoring) per run; the rest are logged
+  with `status = discovered_not_prepared` and the base resume, with no
+  network or Gemini calls at all.
+- The tailoring prompt now explicitly requires escaping LaTeX special
+  characters (a JD's raw `&` had been breaking compilation on one job
+  — a wasted call against an already-scarce daily budget).
+- The workflow now runs Python unbuffered (`python -u`), so log
+  timestamps reflect what actually happened when — the original
+  incident log was confusing partly because Python's default stdout
+  buffering made 13 minutes of real work look like it happened in one
+  burst at the end.
+
+**If your project got suspended:** Google's suspension notice includes
+a link to request an appeal (Cloud Console → the suspended project's
+banner). Worth filing — it costs nothing — but appeals aren't fast or
+guaranteed; anecdotally some go unanswered for weeks. In parallel, you
+can create a new Google Cloud project and a fresh Gemini API key —
+safe to do now that the code above prevents the pattern that caused
+the suspension in the first place.
 
 ## Roadmap (next builds, in a sensible order)
 1. **Human-gated review batch** for LinkedIn/Naukri/Indeed/Glassdoor —

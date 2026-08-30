@@ -52,7 +52,10 @@ equivalent phrasing of the same real skill).
 5. Do NOT change any numbers, percentages, dates, or proper nouns.
 6. Keep the LaTeX structure, commands, and preamble byte-for-byte identical — only edit \
 text inside \\resumeItem{...}, \\listOfSkills{...}, and the Profile Summary paragraph.
-7. Return ONLY the complete, compilable .tex file. No commentary, no markdown fences.
+7. Any word or phrase you introduce from the JD MUST have LaTeX special characters escaped: \
+& becomes \\&, % becomes \\%, $ becomes \\$, # becomes \\#, _ becomes \\_. A single raw \
+special character (e.g. an unescaped "&") will break compilation — check every insertion.
+8. Return ONLY the complete, compilable .tex file. No commentary, no markdown fences.
 
 If you cannot improve the match without breaking a rule above, return the input unchanged."""
 
@@ -78,6 +81,12 @@ Current .tex source:
 def _call_gemini(user_prompt: str) -> str:
     from google import genai
     from google.genai import types
+    import gemini_budget
+
+    if not gemini_budget.can_call():
+        raise RuntimeError(
+            "Gemini daily budget already exhausted — skipping tailoring for the rest of today"
+        )
 
     client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
     config = types.GenerateContentConfig(system_instruction=SYSTEM_PROMPT)
@@ -89,12 +98,22 @@ def _call_gemini(user_prompt: str) -> str:
             resp = client.models.generate_content(
                 model=model_name, contents=user_prompt, config=config,
             )
+            gemini_budget.record_call()
             return (resp.text or "").strip()
         except Exception as e:
             last_err = e
-            if "NOT_FOUND" in str(e) or "404" in str(e):
+            err_str = str(e)
+            if "RESOURCE_EXHAUSTED" in err_str or "429" in err_str or "quota" in err_str.lower():
+                # The real daily quota is gone — stop immediately, don't try
+                # another model, and make sure every later job/run today
+                # skips Gemini entirely instead of hammering the API again.
+                gemini_budget.record_quota_exhausted()
+                raise RuntimeError(
+                    f"Gemini daily quota exhausted — stopping all tailoring for today. {e}"
+                ) from e
+            if "NOT_FOUND" in err_str or "404" in err_str:
                 continue  # this model ID is gone — try the next candidate
-            raise  # a different failure (auth, rate limit) shouldn't be hidden
+            raise  # a different failure (e.g. a transient 503) shouldn't be hidden
     raise RuntimeError(f"All Gemini model candidates failed. Last error: {last_err}")
 
 
@@ -127,6 +146,11 @@ def tailor_resume(tex_source: str, jd_text: str, missing_skills: list,
     user_prompt = _build_user_prompt(tex_source, jd_text, missing_skills, company, role_title)
 
     if os.environ.get("GEMINI_API_KEY"):
+        import gemini_budget
+        if not gemini_budget.can_call():
+            raise RuntimeError(
+                "Gemini daily budget already exhausted — skipping tailoring for the rest of today"
+            )
         new_tex = _call_gemini(user_prompt)
     else:
         new_tex = _call_anthropic(user_prompt)
