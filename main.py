@@ -23,6 +23,7 @@ import yaml
 from db import get_conn, insert_new_jobs
 from classify import score_and_filter
 from prepare_application import prepare
+from ats_detect import detect_all, can_auto_submit, summarize
 from sources import greenhouse, lever, remoteok, wwr, jobspy_source, adzuna
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.yaml")
@@ -115,7 +116,16 @@ def main():
         conn.close()
         return
 
-    print(f"{len(new_jobs)} NEW postings — preparing application packages...")
+    print(f"{len(new_jobs)} NEW postings — detecting which ATS each one lands on...")
+    new_jobs = detect_all(new_jobs)
+    ats_breakdown = summarize(new_jobs)
+    auto_ready = sum(1 for j in new_jobs if can_auto_submit(j))
+    print(f"ATS breakdown: {ats_breakdown}")
+    print(f"  -> {auto_ready} are Greenhouse/Lever (safe to auto-submit once that layer is built)")
+    print(f"  -> {len(new_jobs) - auto_ready} need a human click or your login (LinkedIn/Naukri/"
+          f"Indeed/Glassdoor/Workday/company sites) — see README for why")
+
+    print("Preparing application packages...")
     for j in new_jobs:
         try:
             prepare(j, cfg)
@@ -130,7 +140,7 @@ def main():
     fields = ["score", "mandatory_review", "role_category", "company", "title",
               "location", "location_priority", "years_min", "years_max",
               "is_internship", "resume_to_use", "ats_score", "tailored",
-              "resume_file", "source", "url"]
+              "resume_file", "source", "ats", "final_url", "url"]
     with open(out_path, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()

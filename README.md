@@ -80,6 +80,38 @@ and this stays $0 indefinitely.
 - `status` in the log currently tops out at `package_ready` — it will
   become `applied` once the submission layer (above) actually fires.
 
+## Do I need to give it my LinkedIn/Naukri password?
+
+**No, not for anything this pipeline does today.** Discovery (Adzuna,
+RemoteOK, WWR, Greenhouse, Lever, and the JobSpy layer) all read public
+pages — none of it logs in as you.
+
+Credentials would only come into play if you wanted actual submission
+on LinkedIn or Naukri automated, since posting an application there as
+you requires your logged-in session. I'm deliberately not building
+that: storing your password (or session cookies) in this system is a
+real security exposure if the repo or a secret ever leaked, on top of
+the account-ban risk already covered above. If you want speed on those
+two platforms specifically, the safer trade is the human-review batch
+in the roadmap below — pre-filled, one click each, still fast.
+
+## Which of today's matches can actually be applied to directly?
+
+Every new job now gets an `ats` field (visible in `application_log.csv`
+and `data/new_matches_<date>.csv`), telling you exactly what it landed
+on:
+- **`greenhouse` / `lever`** — public, no-login application systems.
+  These are the safe auto-submit targets and the next thing to build
+  (see Roadmap).
+- **`linkedin` / `naukri` / `indeed` / `glassdoor`** — need your login;
+  earmarked for the human-review batch, not full automation.
+- **`workday` / `company_site`** — per-company forms, too inconsistent
+  to generalize safely; also headed for the review batch.
+
+`resolve_final_url()` follows Adzuna's tracking links to find the real
+destination — this is what makes the classification accurate even
+though Adzuna itself doesn't tell you which ATS a listing uses.
+
 ## One-time setup
 
 ### 1. Get a free Adzuna key

@@ -23,10 +23,14 @@ import difflib
 import os
 from datetime import date
 
-GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
-# If this 404s, Google has moved the free-tier model on again — check
-# https://ai.google.dev/gemini-api/docs/pricing for the current free
-# model name and set GEMINI_MODEL to override.
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.6-flash")
+# Google renames/retires free-tier model IDs periodically (this project
+# already hit that once — 2.5-flash was retired for new users). If the
+# primary model 404s, these are tried in order automatically; only a
+# genuine 404/NOT_FOUND triggers the fallback, other errors (auth, rate
+# limit) propagate immediately so they're not silently masked.
+GEMINI_FALLBACK_MODELS = ["gemini-3.6-flash", "gemini-flash-latest",
+                          "gemini-3.5-flash-lite", "gemini-2.5-flash"]
 
 ANTHROPIC_MODEL = "claude-sonnet-5"
 
@@ -76,12 +80,22 @@ def _call_gemini(user_prompt: str) -> str:
     from google.genai import types
 
     client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
-    resp = client.models.generate_content(
-        model=GEMINI_MODEL,
-        contents=user_prompt,
-        config=types.GenerateContentConfig(system_instruction=SYSTEM_PROMPT),
-    )
-    return (resp.text or "").strip()
+    config = types.GenerateContentConfig(system_instruction=SYSTEM_PROMPT)
+
+    candidates = [GEMINI_MODEL] + [m for m in GEMINI_FALLBACK_MODELS if m != GEMINI_MODEL]
+    last_err = None
+    for model_name in candidates:
+        try:
+            resp = client.models.generate_content(
+                model=model_name, contents=user_prompt, config=config,
+            )
+            return (resp.text or "").strip()
+        except Exception as e:
+            last_err = e
+            if "NOT_FOUND" in str(e) or "404" in str(e):
+                continue  # this model ID is gone — try the next candidate
+            raise  # a different failure (auth, rate limit) shouldn't be hidden
+    raise RuntimeError(f"All Gemini model candidates failed. Last error: {last_err}")
 
 
 def _call_anthropic(user_prompt: str) -> str:

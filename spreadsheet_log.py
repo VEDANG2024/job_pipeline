@@ -19,7 +19,7 @@ LOG_PATH = os.path.join(os.path.dirname(__file__), "application_log.csv")
 
 FIELDS = [
     "date", "company", "role_title", "role_category", "location",
-    "source", "jd_brief", "matched_skills", "missing_skills",
+    "source", "ats", "jd_brief", "matched_skills", "missing_skills",
     "ats_score", "resume_variant", "tailored", "resume_file",
     "job_url", "status",
 ]
