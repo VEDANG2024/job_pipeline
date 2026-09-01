@@ -1,0 +1,33 @@
+--- original.tex
++++ tailored.tex
+@@ -125,17 +125,17 @@
+ \section{Profile Summary}
+ \vspace{-2pt}
+ \footnotesize
+-Business Analyst and Data Analyst with hands-on experience in requirements gathering, process mapping, stakeholder management, and SQL-driven data analysis, backed by Power Platform development (Power Apps, Power BI, Power Automate) and Six Sigma-based root-cause analysis. Redesigned two manual, spreadsheet-and-email-driven workflows into production applications at Kraft Heinz, used daily by \textbf{50+ stakeholders} across \textbf{10+ towers} and saving an estimated \textbf{1,600+ hours} a year. Skilled in process documentation, UAT, and MIS/dashboard reporting for senior leadership.
++Data Analyst and Business Analyst with hands-on experience in SQL-driven data analysis, requirements gathering, process mapping, stakeholder management, and MIS/dashboard reporting, backed by Power Platform development (Power Apps, Power BI, Power Automate) and Six Sigma-based root-cause analysis. Redesigned two manual, spreadsheet-and-email-driven workflows into production applications at Kraft Heinz, used daily by \textbf{50+ stakeholders} across \textbf{10+ towers} and saving an estimated \textbf{1,600+ hours} a year. Skilled in process documentation, UAT, and executive data dashboards.
+ \normalsize
+ 
+ \vspace{-0.5em}
+ %-----------TECHNICAL SKILLS-----------%
+ \section{Technical Skills}
++\listOfSkills{Data \& BI}{SQL, Power BI, Advanced Excel, Pandas/NumPy}
++\listOfSkills{Databases}{PostgreSQL, MySQL, MongoDB}
+ \listOfSkills{Business Analysis}{Requirements Gathering, Process Mapping, Business Process Improvement, As-Is/To-Be Workflow Redesign, Root Cause Analysis, Stakeholder Management, UAT, Client Coordination, Process Documentation, Six Sigma}
+-\listOfSkills{Data \& BI}{SQL, Power BI, Advanced Excel, Pandas/NumPy}
++\listOfSkills{Languages}{SQL, Python, JavaScript}
+ \listOfSkills{App Dev \& Automation}{Power Apps, Power Automate, SharePoint, Git/GitHub}
+-\listOfSkills{Languages}{SQL, Python, JavaScript}
+-\listOfSkills{Databases}{PostgreSQL, MongoDB, MySQL}
+ 
+ \vspace{-0.5em}
+ %-----------EXPERIENCE-----------%
+@@ -145,7 +145,7 @@
+     {Kraft Heinz}{\textbf{Feb 2026 -- Present}}
+     {KHMS/AIT Intern, GCC India}{Ahmedabad, Gujarat}
+     \resumeItemListStart
+-        \resumeItem{Led requirements gathering and end-to-end process analysis for the AIT opportunity-tracking process -- ideas scattered across email, WhatsApp, and personal Excel sheets with no shared taxonomy -- and redesigned it as a standardized 7-stage lifecycle (Idea through Benefit Realization) with a 3-status model and 5-level prioritization, deployed via the AIT Power App to \textbf{50+ users} across \textbf{10 towers}.}
++        \resumeItem{Led requirements gathering and end-to-end data process analysis for the AIT opportunity-tracking process -- ideas scattered across email, WhatsApp, and personal Excel sheets with no shared taxonomy -- and redesigned it as a standardized 7-stage lifecycle (Idea through Benefit Realization) with a 3-status model and 5-level prioritization, deployed via the AIT Power App to \textbf{50+ users} across \textbf{10 towers}.}
+         \resumeItem{Automated status notifications, Rate Card lookups, and weekly MIS/leadership reporting using Power Automate, eliminating an estimated \textbf{1,130+ hours a year} of manual email and reporting effort and raising Rate Card data completion from $\sim$40\% to \textbf{100\%}.}
+         \resumeItem{Authored a User Manual, Technical Documentation, and Build Log, and drove root-cause analysis and repeated UAT cycles with real users, resolving \textbf{12 documented defects} before production rollout.}
+         \resumeItem{Migrated Health Check reporting from scattered Excel files onto a governed SharePoint data model (\textbf{5 lists}), then built the Health Check and OpEx Survey app suite for \textbf{50+ users} across \textbf{11 towers}, embedding validation rules that eliminated common submission errors and saved an estimated \textbf{267 hours a year}. Also tracked process metrics (submission compliance, Realized FTEs) through a live leaderboard and administered role-based access across the platform.}
