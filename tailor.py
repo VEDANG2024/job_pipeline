@@ -95,6 +95,7 @@ def _call_gemini(user_prompt: str) -> str:
     last_err = None
     for model_name in candidates:
         try:
+            gemini_budget.wait_before_call()
             resp = client.models.generate_content(
                 model=model_name, contents=user_prompt, config=config,
             )

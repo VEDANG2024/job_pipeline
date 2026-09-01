@@ -87,3 +87,29 @@ print("8. record_quota_exhausted() stops immediately: OK")
 
 reset()
 print("\nAll gemini_budget fail-safe checks passed.")
+
+# 9. wait_before_call() actually paces consecutive calls (mocked time,
+#    so this test doesn't really take 12+ seconds)
+from unittest.mock import patch
+
+sleep_calls = []
+fake_now = [1000.0]
+
+def fake_time():
+    return fake_now[0]
+
+def fake_sleep(seconds):
+    sleep_calls.append(seconds)
+    fake_now[0] += seconds
+
+gb._last_call_time[0] = 0.0
+with patch("time.time", side_effect=fake_time), patch("time.sleep", side_effect=fake_sleep):
+    gb.wait_before_call()  # first call: plenty of time has "passed" -> no sleep
+    assert sleep_calls == []
+    fake_now[0] += 2  # only 2 real seconds before the next call
+    gb.wait_before_call()  # elapsed=2 < 12 -> must sleep for the remaining 10
+    assert sleep_calls == [10], sleep_calls
+
+print("9. wait_before_call() paces consecutive calls: OK")
+print("\nAll gemini_budget checks passed.")
+

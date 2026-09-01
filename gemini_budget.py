@@ -26,6 +26,7 @@ silently hand out a budget we can't actually verify.
 """
 import json
 import os
+import time
 from datetime import date
 
 STATE_PATH = os.path.join(os.path.dirname(__file__), "data", "gemini_usage.json")
@@ -35,6 +36,14 @@ STATE_PATH = os.path.join(os.path.dirname(__file__), "data", "gemini_usage.json"
 # under that leaves headroom in case anything else shares the same
 # project/key, or the limit changes again.
 MAX_DAILY_CALLS = 15
+
+# Separate from the daily cap: a minimum gap between consecutive
+# calls, in-process. The daily cap alone doesn't rule out a per-minute
+# burst limit stacked on top of it — most APIs have both — so calls
+# are paced regardless of how much daily budget remains. Cheap
+# insurance: worst case this adds a few minutes to a run.
+MIN_SECONDS_BETWEEN_CALLS = 12
+_last_call_time = [0.0]
 
 
 def _fresh_state() -> dict:
@@ -120,4 +129,15 @@ def status_banner() -> str:
         return f"Gemini budget: EXHAUSTED for {s['date']} — no tailoring calls will be attempted."
     remaining = MAX_DAILY_CALLS - s["calls_used"]
     return f"Gemini budget: {s['calls_used']}/{MAX_DAILY_CALLS} used today, {remaining} remaining."
+
+
+def wait_before_call():
+    """Blocks until at least MIN_SECONDS_BETWEEN_CALLS have passed
+    since the last call this process made. Call this immediately
+    before every real Gemini request — not just when checking the
+    daily budget — so calls are paced even in the same run."""
+    elapsed = time.time() - _last_call_time[0]
+    if elapsed < MIN_SECONDS_BETWEEN_CALLS:
+        time.sleep(MIN_SECONDS_BETWEEN_CALLS - elapsed)
+    _last_call_time[0] = time.time()
 
