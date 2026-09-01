@@ -7,15 +7,18 @@ prepare_application.py — for one scored/filtered job, this:
      PDF. If tailoring is unavailable (no GEMINI_API_KEY) or fails,
      falls back to the base resume and flags the job for manual review
      rather than blocking the run.
-  4. Logs one row to application_log.csv via spreadsheet_log.py.
+  4. If the job is on Greenhouse or Lever (the only two ATSs this
+     pipeline submits to) and apply.enabled is true: attempts the
+     application via apply_bot.py, right here, so the outcome lands in
+     the SAME row as everything else about this job.
+  5. Logs one row to application_log.csv via spreadsheet_log.py.
 
-NOTE ON "status": this stage prepares the application package — it
-does not click Apply anywhere yet. Status is written as
-"package_ready" (or "needs_manual_tailor" / "needs_resume_review").
-Once the next build phase (the actual submission layer — auto for
-Greenhouse/Lever, human-gated review-and-click for LinkedIn/Naukri/
-Indeed/Glassdoor/Workday) is wired in, that layer will flip the status
-to "applied" after the real submission happens.
+NOTE ON "status": for Greenhouse/Lever jobs with apply.enabled, status
+becomes one of `submitted`, `auto_apply_dry_run_ready`, or
+`auto_apply_blocked_incomplete` — see apply_result for the specifics
+(which fields filled, what's still missing, the screenshot path).
+Everything else (LinkedIn/Naukri/Indeed/Glassdoor/Workday/company
+sites) tops out at `package_ready` — fully prepared, needs your click.
 """
 import os
 from datetime import date
@@ -27,10 +30,40 @@ import spreadsheet_log
 from tex_to_text import flatten_file
 
 BASE_DIR = os.path.dirname(__file__)
+AUTO_SUBMIT_ATS = {"greenhouse", "lever"}
 
 
 def _slug(text: str) -> str:
     return "".join(c if c.isalnum() else "_" for c in text)[:40].strip("_")
+
+
+def _attempt_auto_apply(job: dict, resume_file: str, cfg: dict) -> tuple:
+    """Returns (status, apply_result_text). Only called for Greenhouse/
+    Lever jobs when apply.enabled is true. Never raises — a failure
+    here falls back to package_ready with the error noted, exactly
+    like a tailoring failure does."""
+    apply_cfg = cfg.get("apply", {})
+    if job.get("ats") not in AUTO_SUBMIT_ATS or not apply_cfg.get("enabled") or not resume_file:
+        return "package_ready", ""
+
+    try:
+        import apply_bot
+        report = apply_bot.apply_to_job(
+            job, resume_file, apply_cfg["applicant"],
+            dry_run=apply_cfg.get("dry_run", True),
+        )
+    except Exception as e:
+        return "package_ready", f"apply_bot error: {e}"
+
+    if report["submitted"]:
+        return "submitted", f"submitted — screenshot: {report['screenshot']}"
+    if report["dry_run"]:
+        missing = ", ".join(report["unfilled_required_fields"]) or "none"
+        return ("auto_apply_dry_run_ready",
+                f"dry-run filled ({', '.join(report['fields_filled']) or 'nothing'}); "
+                f"unfilled required: {missing}; screenshot: {report['screenshot']}")
+    missing = ", ".join(report["unfilled_required_fields"]) or "resume upload failed"
+    return "auto_apply_blocked_incomplete", f"blocked — missing: {missing}"
 
 
 def log_discovered_only(job: dict):
@@ -51,7 +84,7 @@ def log_discovered_only(job: dict):
         "matched_skills": "", "missing_skills": "",
         "ats_score": "", "resume_variant": role, "tailored": "no",
         "resume_file": "", "job_url": job.get("url", ""),
-        "status": "discovered_not_prepared",
+        "status": "discovered_not_prepared", "apply_result": "",
     })
 
 
@@ -74,7 +107,7 @@ def prepare(job: dict, cfg: dict) -> dict:
             "matched_skills": "", "missing_skills": "",
             "ats_score": "", "resume_variant": "", "tailored": "no",
             "resume_file": "", "job_url": job.get("url", ""),
-            "status": "needs_resume_review",
+            "status": "needs_resume_review", "apply_result": "",
         })
         return job
 
@@ -113,6 +146,10 @@ def prepare(job: dict, cfg: dict) -> dict:
                   f"{job['company']} / {job['title']}: {e}")
             status = "needs_manual_tailor"
 
+    apply_result = ""
+    if status == "package_ready":  # only attempt auto-apply if tailoring didn't already fail
+        status, apply_result = _attempt_auto_apply(job, resume_file, cfg)
+
     spreadsheet_log.append_row({
         "date": date.today().isoformat(),
         "company": job["company"],
@@ -130,9 +167,11 @@ def prepare(job: dict, cfg: dict) -> dict:
         "resume_file": resume_file,
         "job_url": job.get("url", ""),
         "status": status,
+        "apply_result": apply_result,
     })
 
     job["ats_score"] = result["score"]
     job["resume_file"] = resume_file
     job["tailored"] = tailored
+    job["status"] = status
     return job

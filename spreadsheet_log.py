@@ -21,7 +21,7 @@ FIELDS = [
     "date", "company", "role_title", "role_category", "location",
     "source", "ats", "jd_brief", "matched_skills", "missing_skills",
     "ats_score", "resume_variant", "tailored", "resume_file",
-    "job_url", "status",
+    "job_url", "status", "apply_result",
 ]
 
 

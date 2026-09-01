@@ -26,7 +26,6 @@ from prepare_application import prepare, log_discovered_only
 from ats_detect import detect_all, can_auto_submit, summarize
 from sources import greenhouse, lever, remoteok, wwr, jobspy_source, adzuna
 import gemini_budget
-import apply_bot
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.yaml")
 
@@ -152,25 +151,14 @@ def main():
 
     apply_cfg = cfg.get("apply", {})
     if apply_cfg.get("enabled"):
-        auto_ready_jobs = [j for j in to_prepare if can_auto_submit(j) and j.get("resume_file")]
-        if auto_ready_jobs:
-            mode = "DRY RUN" if apply_cfg.get("dry_run", True) else "LIVE SUBMIT"
-            print(f"Attempting {len(auto_ready_jobs)} Greenhouse/Lever application(s) [{mode}]...")
-            for j in auto_ready_jobs:
-                try:
-                    report = apply_bot.apply_to_job(
-                        j, j["resume_file"], apply_cfg["applicant"],
-                        dry_run=apply_cfg.get("dry_run", True),
-                    )
-                    status = ("submitted" if report["submitted"] else
-                               "ready_dry_run" if report["dry_run"] else
-                               "blocked_incomplete")
-                    print(f"  [{status}] {j['company']} / {j['title']} — "
-                          f"filled {report['fields_filled']}, "
-                          f"unfilled_required={report['unfilled_required_fields']}, "
-                          f"screenshot={report['screenshot']}")
-                except Exception as e:
-                    print(f"[apply_bot] failed for {j['company']} / {j['title']}: {e}")
+        submitted = sum(1 for j in to_prepare if j.get("status") == "submitted")
+        dry_run_ready = sum(1 for j in to_prepare if j.get("status") == "auto_apply_dry_run_ready")
+        blocked = sum(1 for j in to_prepare if j.get("status") == "auto_apply_blocked_incomplete")
+        if submitted or dry_run_ready or blocked:
+            mode = "LIVE" if not apply_cfg.get("dry_run", True) else "DRY RUN"
+            print(f"Auto-apply (Greenhouse/Lever) [{mode}]: {submitted} submitted, "
+                  f"{dry_run_ready} dry-run ready for review, {blocked} blocked (incomplete) "
+                  f"— see application_log.csv's apply_result column for details on each")
 
     out_path = os.path.join(
         os.path.dirname(__file__), "data",
