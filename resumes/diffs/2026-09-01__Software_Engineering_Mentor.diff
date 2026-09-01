@@ -1,0 +1,29 @@
+--- original.tex
++++ tailored.tex
+@@ -127,15 +127,15 @@
+ \section{Profile Summary}
+ \vspace{-2pt}
+ \footnotesize
+-Software Engineer and Data Engineer with expertise in software engineering, distributed systems, SQL-driven query optimization, and applied machine learning for systems efficiency. Designed, built, and shipped two Power Platform applications at Kraft Heinz used daily by \textbf{50+ people} across \textbf{10 towers}, engineering automation estimated to save \textbf{1,600+ hours} a year. Also builds systems-level research: an entropy-aware LLM-routing model that cuts inference cost by \textbf{78\%}, and a learned cardinality estimator for query-plan optimization.
++Software Engineering Mentor and Engineer with expertise in software development, system design, distributed systems, SQL-driven query optimization, and applied machine learning. Experienced in guiding learners through hands-on technical concepts, code reviews, and software engineering practices. Designed, built, and shipped two Power Platform applications at Kraft Heinz used daily by \textbf{50+ people} across \textbf{10 towers}, engineering automation estimated to save \textbf{1,600+ hours} a year. Also builds systems-level research: an entropy-aware LLM-routing model that cuts inference cost by \textbf{78\%}, and a learned cardinality estimator for query-plan optimization.
+ \normalsize
+ 
+ \vspace{-0.55em}
+ %-----------TECHNICAL SKILLS-----------%
+ \section{Technical Skills}
++\listOfSkills{Systems \& ML}{System Design, Distributed Systems, Query Optimization, QLoRA/PEFT Fine-Tuning, XGBoost}
+ \listOfSkills{Languages}{C, C++, Python, SQL, JavaScript}
+ \listOfSkills{Databases}{PostgreSQL, MongoDB, MySQL, Redis}
+-\listOfSkills{Systems \& ML}{Distributed Systems, Query Optimization, QLoRA/PEFT Fine-Tuning, XGBoost}
+ \listOfSkills{App Dev \& Automation}{Power Apps, Power Automate, Git/GitHub, Figma, LangChain}
+ \listOfSkills{Data \& BI}{Power BI, Pandas/NumPy, NLTK/spaCy}
+ 
+@@ -227,7 +227,7 @@
+     {Teaching Assistant -- Software Engineering \& Object-Oriented Programming}{\textbf{Aug 2024 -- Present}}
+     {DA-IICT, Gandhinagar}{Gandhinagar, Gujarat}
+     \resumeItemListStart
+-        \resumeItem{Conducted labs and doubt-clearing sessions of 100+ students, designed and evaluated assignments/exams, and mentored students in Software Engineering and Object-Oriented Programming.}
++        \resumeItem{Conducted hands-on technical labs, doubt-clearing sessions, and code reviews for 100+ students, guiding learners in coding, debugging, and software engineering best practices while evaluating assignments and mentoring in Object-Oriented Programming.}
+     \resumeItemListEnd
+ \resumeSubHeadingListEnd
+ 

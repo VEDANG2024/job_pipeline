@@ -1,0 +1,54 @@
+--- original.tex
++++ tailored.tex
+@@ -125,15 +125,15 @@
+ \section{Profile Summary}
+ \vspace{-2pt}
+ \footnotesize
+-Business Analyst and Data Analyst with hands-on experience in requirements gathering, process mapping, stakeholder management, and SQL-driven data analysis, backed by Power Platform development (Power Apps, Power BI, Power Automate) and Six Sigma-based root-cause analysis. Redesigned two manual, spreadsheet-and-email-driven workflows into production applications at Kraft Heinz, used daily by \textbf{50+ stakeholders} across \textbf{10+ towers} and saving an estimated \textbf{1,600+ hours} a year. Skilled in process documentation, UAT, and MIS/dashboard reporting for senior leadership.
++Business Analyst and Data Analyst with hands-on experience in requirements gathering, process mapping, cross-functional stakeholder collaboration, and testing life cycle execution including UAT and defect management, backed by Power Platform development (Power Apps, Power BI, Power Automate) and Six Sigma-based root-cause analysis. Redesigned two manual, spreadsheet-and-email-driven workflows into production applications at Kraft Heinz, used daily by \textbf{50+ stakeholders} across \textbf{10+ towers} and saving an estimated \textbf{1,600+ hours} a year. Skilled in technical documentation, defect management, and MIS/dashboard reporting for leadership.
+ \normalsize
+ 
+ \vspace{-0.5em}
+ %-----------TECHNICAL SKILLS-----------%
+ \section{Technical Skills}
+-\listOfSkills{Business Analysis}{Requirements Gathering, Process Mapping, Business Process Improvement, As-Is/To-Be Workflow Redesign, Root Cause Analysis, Stakeholder Management, UAT, Client Coordination, Process Documentation, Six Sigma}
++\listOfSkills{Testing \& Process Analysis}{UAT, Defect Management, Requirements Gathering, Process Mapping, Business Process Improvement, As-Is/To-Be Workflow Redesign, Root Cause Analysis, Cross-Functional Stakeholder Collaboration, Technical Documentation, Six Sigma}
++\listOfSkills{App Dev \& Automation}{Power Apps, Power Automate, SharePoint, Git/GitHub}
+ \listOfSkills{Data \& BI}{SQL, Power BI, Advanced Excel, Pandas/NumPy}
+-\listOfSkills{App Dev \& Automation}{Power Apps, Power Automate, SharePoint, Git/GitHub}
+ \listOfSkills{Languages}{SQL, Python, JavaScript}
+ \listOfSkills{Databases}{PostgreSQL, MongoDB, MySQL}
+ 
+@@ -147,20 +147,20 @@
+     \resumeItemListStart
+         \resumeItem{Led requirements gathering and end-to-end process analysis for the AIT opportunity-tracking process -- ideas scattered across email, WhatsApp, and personal Excel sheets with no shared taxonomy -- and redesigned it as a standardized 7-stage lifecycle (Idea through Benefit Realization) with a 3-status model and 5-level prioritization, deployed via the AIT Power App to \textbf{50+ users} across \textbf{10 towers}.}
+         \resumeItem{Automated status notifications, Rate Card lookups, and weekly MIS/leadership reporting using Power Automate, eliminating an estimated \textbf{1,130+ hours a year} of manual email and reporting effort and raising Rate Card data completion from $\sim$40\% to \textbf{100\%}.}
+-        \resumeItem{Authored a User Manual, Technical Documentation, and Build Log, and drove root-cause analysis and repeated UAT cycles with real users, resolving \textbf{12 documented defects} before production rollout.}
++        \resumeItem{Authored technical documentation, build logs, and user manuals while driving root-cause analysis and end-to-end UAT cycles with real users, tracking defects and managing closure of \textbf{12 documented defects} prior to production rollout.}
+         \resumeItem{Migrated Health Check reporting from scattered Excel files onto a governed SharePoint data model (\textbf{5 lists}), then built the Health Check and OpEx Survey app suite for \textbf{50+ users} across \textbf{11 towers}, embedding validation rules that eliminated common submission errors and saved an estimated \textbf{267 hours a year}. Also tracked process metrics (submission compliance, Realized FTEs) through a live leaderboard and administered role-based access across the platform.}
+     \resumeItemListEnd
+     \resumeSubheading
+     {Karma Technolabs}{\textbf{Jan 2024 -- Apr 2024}}
+     {Web Development Intern}{Ahmedabad, Gujarat}
+     \resumeItemListStart
+-        \resumeItem{Enhanced search, filter, and upload functionality on a live CRM platform, contributing end-to-end across the development-to-deployment lifecycle.}
++        \resumeItem{Enhanced search, filter, and upload functionality on a live CRM platform, conducting validation testing and contributing across the Agile development-to-deployment life cycle.}
+     \resumeItemListEnd
+     \resumeSubheading
+     {JS Placements and Fiscal Services}{\textbf{Feb 2022 -- Feb 2023}}
+     {Coordinator}{Ahmedabad, Gujarat}
+     \resumeItemListStart
+-        \resumeItem{Coordinated research, documentation, and cross-functional communication between clients, candidates, and internal teams through a standardized recruitment pipeline.}
++        \resumeItem{Coordinated research, documentation, and cross-functional communication between clients, candidates, and internal stakeholders through a standardized recruitment pipeline.}
+     \resumeItemListEnd
+ \resumeSubHeadingListEnd
+ 
+@@ -210,7 +210,7 @@
+     {Teaching Assistant -- Software Engineering \& Object-Oriented Programming}{\textbf{Aug 2024 -- Present}}
+     {DA-IICT, Gandhinagar}{Gandhinagar, Gujarat}
+     \resumeItemListStart
+-        \resumeItem{Conducted labs and doubt-clearing sessions of 100+ students, designed and evaluated assignments/exams, and mentored students in Software Engineering and Object-Oriented Programming.}
++        \resumeItem{Conducted labs and doubt-clearing sessions of 100+ students, designed and evaluated assignments/exams, and mentored students in Software Engineering methodologies, Agile practices, and Object-Oriented Programming.}
+     \resumeItemListEnd
+ \resumeSubHeadingListEnd
+ 

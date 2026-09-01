@@ -1,0 +1,52 @@
+--- original.tex
++++ tailored.tex
+@@ -127,16 +127,16 @@
+ \section{Profile Summary}
+ \vspace{-2pt}
+ \footnotesize
+-Software Engineer and Data Engineer with expertise in software engineering, distributed systems, SQL-driven query optimization, and applied machine learning for systems efficiency. Designed, built, and shipped two Power Platform applications at Kraft Heinz used daily by \textbf{50+ people} across \textbf{10 towers}, engineering automation estimated to save \textbf{1,600+ hours} a year. Also builds systems-level research: an entropy-aware LLM-routing model that cuts inference cost by \textbf{78\%}, and a learned cardinality estimator for query-plan optimization.
++Software Engineer with experience managing application development lifecycles from requirement gathering to final delivery. Designed, built, documented, and shipped two Power Platform applications at Kraft Heinz used daily by \textbf{50+ people} across \textbf{10 towers}, coordinating process automation estimated to save \textbf{1,600+ hours} a year. Also builds systems-level research: an entropy-aware LLM-routing model that cuts inference cost by \textbf{78\%}, and a learned cardinality estimator for query-plan optimization.
+ \normalsize
+ 
+ \vspace{-0.55em}
+ %-----------TECHNICAL SKILLS-----------%
+ \section{Technical Skills}
++\listOfSkills{App Dev \& Automation}{Power Apps, Power Automate, Git/GitHub, Figma, LangChain}
+ \listOfSkills{Languages}{C, C++, Python, SQL, JavaScript}
+ \listOfSkills{Databases}{PostgreSQL, MongoDB, MySQL, Redis}
+ \listOfSkills{Systems \& ML}{Distributed Systems, Query Optimization, QLoRA/PEFT Fine-Tuning, XGBoost}
+-\listOfSkills{App Dev \& Automation}{Power Apps, Power Automate, Git/GitHub, Figma, LangChain}
+ \listOfSkills{Data \& BI}{Power BI, Pandas/NumPy, NLTK/spaCy}
+ 
+ \vspace{-0.55em}
+@@ -147,16 +147,16 @@
+     {Kraft Heinz}{\textbf{Feb 2026 -- Present}}
+     {KHMS/AIT Intern, GCC India}{Ahmedabad, Gujarat}
+     \resumeItemListStart
+-        \resumeItem{Engineered the AIT Power App end-to-end (5 screens, 20 SharePoint columns across 4 data types) after mapping the manual, email/Excel-based opportunity-tracking process, deploying a standardized 7-stage lifecycle model to \textbf{50+ users} across \textbf{10 towers}.}
+-        \resumeItem{Implemented 6+ conditional logic rules (field visibility, record locking, cascading filters, form validation) and 2 automated email-notification triggers, cutting an estimated \textbf{1,130+ hours a year} of manual status-update and reporting effort.}
+-        \resumeItem{Debugged and resolved \textbf{12 documented defects} through root-cause analysis across iterative build-test-fix cycles with real users, shipping the app entirely on existing Microsoft 365 licensing (Power Apps, SharePoint, Power Automate) with zero external budget.}
+-        \resumeItem{Migrated Health Check data onto a governed SharePoint backend (\textbf{5 lists}) and engineered the Health Check and OpEx Survey app suite -- wizard-based flow, dependent dropdowns, submission validation -- for \textbf{50+ users} across \textbf{11 towers}, cutting submission errors to near-zero and saving an estimated \textbf{267 hours a year}. Also implemented role-based access control across the platform, adding a limited-permission tier to enforce data governance without admin bottlenecks.}
++        \resumeItem{Managed the AIT Power App development lifecycle end-to-end (5 screens, 20 SharePoint columns across 4 data types) from requirement gathering and process mapping to final delivery, deploying a standardized 7-stage lifecycle model to \textbf{50+ users} across \textbf{10 towers}.}
++        \resumeItem{Implemented 6+ conditional logic rules (field visibility, record locking, cascading filters, form validation) and 2 automated email-notification triggers, streamlining progress tracking and reporting to save an estimated \textbf{1,130+ hours a year} of manual effort.}
++        \resumeItem{Monitored project quality and resolved \textbf{12 documented defects} through root-cause analysis across iterative build-test-fix cycles with users, delivering the project on time using Microsoft 365 licensing (Power Apps, SharePoint, Power Automate) with zero external budget.}
++        \resumeItem{Coordinated the development and documentation of the Health Check and OpEx Survey app suite on a governed SharePoint backend (\textbf{5 lists}) -- wizard-based flow, dependent dropdowns, submission validation -- for \textbf{50+ users} across \textbf{11 towers}, ensuring quality delivery that cut submission errors to near-zero and saved an estimated \textbf{267 hours a year}, with role-based access control for governance.}
+     \resumeItemListEnd
+     \resumeSubheading
+     {Karma Technolabs}{\textbf{Jan 2024 -- Apr 2024}}
+     {Web Development Intern}{Ahmedabad, Gujarat}
+     \resumeItemListStart
+-        \resumeItem{Enhanced search, filter, and upload functionality on a live CRM platform, contributing end-to-end across the development-to-deployment lifecycle.}
++        \resumeItem{Enhanced search, filter, and upload functionality on a live web CRM platform, coordinating across the complete development-to-deployment lifecycle to deliver projects within defined timelines.}
+     \resumeItemListEnd
+ \resumeSubHeadingListEnd
+ 
+@@ -227,7 +227,7 @@
+     {Teaching Assistant -- Software Engineering \& Object-Oriented Programming}{\textbf{Aug 2024 -- Present}}
+     {DA-IICT, Gandhinagar}{Gandhinagar, Gujarat}
+     \resumeItemListStart
+-        \resumeItem{Conducted labs and doubt-clearing sessions of 100+ students, designed and evaluated assignments/exams, and mentored students in Software Engineering and Object-Oriented Programming.}
++        \resumeItem{Communicated complex topics and conducted lab sessions for 100+ students, managing deadlines for designing and evaluating assignments/exams, and mentoring students in Software Engineering and Object-Oriented Programming.}
+     \resumeItemListEnd
+ \resumeSubHeadingListEnd
+ 
