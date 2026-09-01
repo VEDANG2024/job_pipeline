@@ -23,7 +23,7 @@ Cloud project behind your Gemini key (even to try a paid model),
 Google removes that project's free tier entirely. Don't enable billing
 and this stays $0 indefinitely.
 
-## What it does
+## What it does — and what it deliberately does not
 
 1. **Discovers** postings — no company list to maintain, everything is
    driven by keyword + location:
@@ -65,20 +65,43 @@ and this stays $0 indefinitely.
 5. **Logs every job** to `application_log.csv` — company, role, JD
    brief, matched/missing skills, ATS score, which resume was used,
    whether it was tailored, and a status.
+6. **Auto-applies to Greenhouse and Lever postings, and only those
+   two.** `apply_bot.py` fills the application form (name, email,
+   phone, LinkedIn, resume upload) using Playwright, screenshots the
+   result, and by default (`apply.dry_run: true`) stops there — Submit
+   is never clicked. Even with `dry_run: false`, a required field it
+   couldn't fill or a resume that failed to attach blocks submission
+   outright, regardless of the setting. Screenshots land in
+   `applications/screenshots/`; review several real ones against the
+   actual posting before ever flipping `dry_run` to `false`.
 
-## What this does NOT do yet
+**Does not touch LinkedIn, Naukri, Indeed, Glassdoor, Wellfound, or
+Workday for submission**, on purpose:
+- LinkedIn/Naukri/Wellfound need *your* logged-in session to apply as
+  you — meaning storing your credentials somewhere this system can
+  reach them, on top of the real account-restriction risk automating
+  those platforms carries (see the earlier conversation, and this
+  project's own Google Cloud suspension for a related reason — an
+  automated system correctly detecting a bot-like pattern isn't
+  hypothetical, it already happened here once).
+- Workday forms vary too much per company to generalize the way
+  Greenhouse/Lever's shared template allows; a specific employer's
+  Workday flow could be built as its own targeted piece of work, but
+  a generic "any Workday posting" bot isn't reliable enough to trust
+  with a real submission.
+- WWR has no application system of its own to automate — it redirects
+  to whatever the company actually uses, which `ats_detect.py` already
+  resolves and classifies.
 
-- It does not submit applications on LinkedIn/Naukri/Indeed/Glassdoor —
-  automating that risks your account being flagged or restricted (see
-  the conversation above for why). The plan is a human-gated
-  "review and click" batch for these.
-- It does not yet submit to Greenhouse/Lever/company sites — that's a
-  safe automation target (public, no-login APIs) and is the natural
-  next build.
-- It does not send cold emails yet — also a natural next build, and
-  the lowest-risk piece since it's your own outbound email.
-- `status` in the log currently tops out at `package_ready` — it will
-  become `applied` once the submission layer (above) actually fires.
+For everything in that second group, the log (`application_log.csv`)
+is the tool: it's fully prepared (scored, tailored resume ready, ATS
+identified) and just needs your click.
+
+`status` in the log is `package_ready` for auto-apply candidates
+before `apply.enabled` runs, then becomes one of `ready_dry_run`,
+`submitted`, or `blocked_incomplete` once it does. Everything else
+tops out at `package_ready` — that's not a gap to fix, it's the
+boundary described above.
 
 ## Do I need to give it my LinkedIn/Naukri password?
 
@@ -101,12 +124,11 @@ Every new job now gets an `ats` field (visible in `application_log.csv`
 and `data/new_matches_<date>.csv`), telling you exactly what it landed
 on:
 - **`greenhouse` / `lever`** — public, no-login application systems.
-  These are the safe auto-submit targets and the next thing to build
-  (see Roadmap).
+  These get fully auto-applied to (dry-run by default — see above).
 - **`linkedin` / `naukri` / `indeed` / `glassdoor`** — need your login;
-  earmarked for the human-review batch, not full automation.
+  these go in the log fully prepared, ready for your one-click review.
 - **`workday` / `company_site`** — per-company forms, too inconsistent
-  to generalize safely; also headed for the review batch.
+  to generalize safely; also logged fully prepared, not auto-submitted.
 
 `resolve_final_url()` follows Adzuna's tracking links to find the real
 destination — this is what makes the classification accurate even
@@ -181,10 +203,13 @@ Everything the workflow does is visible in the repo itself:
 - `data/new_matches_<date>.csv` — quick glance at what's new each run
 - `resumes/tailored/*.pdf` and `resumes/diffs/*.diff` — what got
   tailored and exactly what changed
+- `applications/screenshots/*.png` — what the Greenhouse/Lever auto-fill
+  actually did to each form
 
 ## Running it locally (optional, for testing changes)
 ```bash
 pip install -r requirements.txt --break-system-packages
+playwright install --with-deps chromium
 sudo apt-get install -y texlive-latex-base texlive-latex-extra \
     texlive-fonts-recommended texlive-fonts-extra
 export ADZUNA_APP_ID="..."
@@ -200,14 +225,17 @@ checking your filters behave the way you want:
 ```bash
 python tests/test_pipeline_offline.py
 ```
-`tests/test_nan_safety.py` and `tests/test_gemini_budget.py` are
-regression tests for the two real incidents this project has already
-hit in production (a pandas-NaN crash, and the Gemini quota/suspension
-issue) — run them after any change to `classify.py`, `db.py`,
-`ats_score.py`, `spreadsheet_log.py`, or `gemini_budget.py`:
+`tests/test_nan_safety.py`, `tests/test_gemini_budget.py`, and
+`tests/test_apply_bot.py` are regression tests for real incidents/risks
+this project has already hit or specifically guards against (a
+pandas-NaN crash, the Gemini quota/suspension issue, and — critically —
+`apply_bot.py` never submitting an incomplete application). Run them
+after any change to `classify.py`, `db.py`, `ats_score.py`,
+`spreadsheet_log.py`, `gemini_budget.py`, or `apply_bot.py`:
 ```bash
 python tests/test_nan_safety.py
 python tests/test_gemini_budget.py
+python tests/test_apply_bot.py
 ```
 
 ## Known limitations to expect
@@ -274,14 +302,14 @@ safe to do now that the code above prevents the pattern that caused
 the suspension in the first place.
 
 ## Roadmap (next builds, in a sensible order)
-1. **Human-gated review batch** for LinkedIn/Naukri/Indeed/Glassdoor —
-   pre-filled applications queued for a single daily approve-and-click
-   pass, capped well under each site's flag thresholds. Also covers
-   Adzuna-sourced Workday postings, since Adzuna's `redirect_url`
-   ultimately lands on the employer's own application page.
+1. **Human-review speedup** for LinkedIn/Naukri/Indeed/Glassdoor/
+   Workday/company sites — right now the log is the tool; a small
+   local script that opens each `ready_dry_run`-adjacent job's URL in
+   order would shave time off the click-through without touching any
+   of the automation boundaries above.
 2. **Cold email sender** — Gmail API on vedangtrivediworks@gmail.com,
    rate-capped and personalized, pulling contacts via Hunter.io/Apollo.io
    (both have free tiers too).
-3. **Greenhouse/Lever auto-submit** — only relevant if you later pin
-   specific companies in `config.yaml`; fully automatable since these
-   are public, intentionally-scriptable APIs.
+3. **A specific Workday employer's flow** — if you name one you care
+   about, that's a tractable, testable target; a generic "any Workday
+   site" bot is not.

@@ -3,6 +3,7 @@ pyyaml>=6.0
 feedparser>=6.0
 google-genai>=0.3       # resume tailoring — free tier, no card needed (see README)
 python-jobspy>=1.1.80   # optional — LinkedIn/Indeed/Glassdoor/Naukri/Google discovery, best-effort
+playwright>=1.40        # Greenhouse/Lever auto-fill (dry-run first — see README)
 
 # Optional, NOT required for a $0 setup — only install if you decide you
 # want Claude instead of Gemini for tailoring (paid, pay-per-use):

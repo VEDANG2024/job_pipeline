@@ -86,3 +86,27 @@ companies:
 # Raise it once you've confirmed a comfortable run time.
 pipeline:
   max_prepare_per_run: 40
+
+# ---- Auto-apply: Greenhouse & Lever ONLY, dry-run by default ----
+# These are the only two ATSs this pipeline submits to directly — no
+# personal login required, no account-ban risk. LinkedIn/Naukri/
+# Wellfound/Workday/company sites are NOT auto-submitted; see README
+# for why and what the alternative is.
+#
+# dry_run: true fills the form and screenshots it (applications/
+# screenshots/) but NEVER clicks Submit — filling a form has zero
+# effect on the employer's side. Review several real screenshots
+# before ever setting this to false. Even with dry_run: false, a
+# required field the bot couldn't fill, or a resume that failed to
+# attach, blocks submission outright — this is checked live against
+# the page, not assumed.
+apply:
+  enabled: true
+  dry_run: true
+  applicant:
+    first_name: "Vedang"
+    last_name: "Trivedi"
+    full_name: "Vedang Trivedi"
+    email: "vedangtrivediworks@gmail.com"
+    phone: ""                                    # fill in your number
+    linkedin_url: "https://www.linkedin.com/in/vedang-trivedi-0389a91b9"
