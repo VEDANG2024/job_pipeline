@@ -16,30 +16,10 @@ filters:
   ats_tailor_threshold: 85          # only used if tailoring.enabled below is true
 
 # ---- Resume tailoring — OFF by default ----
-# Resume CHOICE always happens regardless of this setting: every job
-# is scored against both resumes (a fast, free, local keyword
-# comparison, no API call) and whichever fits better is used. This
-# setting only controls an OPTIONAL extra step on top of that: if
-# true, and a job's fit score is below filters.ats_tailor_threshold,
-# Gemini rewrites the chosen resume's wording/emphasis to better match
-# the JD. Off by default because applying should never wait on Gemini
-# being available — the free-tier quota has already been exhausted in
-# production once. If tailoring is on and it fails or the budget is
-# spent, the pipeline falls back to the already-chosen base resume and
-# keeps going — it never blocks the apply step either way.
 tailoring:
   enabled: false
 
 # ---- Adzuna: PRIMARY discovery engine — NO company list needed ----
-# Adzuna aggregates postings from 30+ sources (Workday, Indeed,
-# Glassdoor, and more) and is searched by keyword + location, not by
-# company — this is what covers every company automatically without
-# you maintaining a list.
-# Free key (2 min, no cost): https://developer.adzuna.com/
-# Set ADZUNA_APP_ID and ADZUNA_APP_KEY as environment variables — see
-# README. Add/remove search rows freely; keep the total modest since
-# the free tier is ~1,000 calls/month (each row = up to
-# max_pages_per_query calls per run).
 adzuna:
   enabled: true
   country: "in"
@@ -64,11 +44,12 @@ remote_boards:
   remoteok: true
   weworkremotely:
     - "remote-programming-jobs"
+    - "remote-Business Analyst-jobs"
+    - "remote-Data Analyst-jobs"
+    - "remote-Analyst-jobs"
     - "remote-business-development-jobs"
 
-# ---- Direct board search — LinkedIn / Indeed / Glassdoor / Naukri / ----
-# ---- Google, via python-jobspy. Also keyword+location based, no ----
-# ---- company list needed. Best-effort — see README for caveats. ----
+# ---- Direct board search — LinkedIn / Indeed / Glassdoor / Naukri / Google ----
 jobspy:
   enabled: true
   sites: ["linkedin", "indeed", "glassdoor", "naukri", "google"]
@@ -79,42 +60,204 @@ jobspy:
   results_wanted_per_query: 25
   hours_old: 48
 
-# ---- OPTIONAL / ADVANCED — you do NOT need to fill this in. ----
-# Adzuna + JobSpy above already cover every company automatically.
-# Only add entries here if you want to explicitly pin a specific
-# company for guaranteed coverage regardless of whether Adzuna/
-# LinkedIn happen to index it (token = the slug in its careers URL:
-# boards.greenhouse.io/<token> or jobs.lever.co/<token>).
+# ---- Explicitly pinned Greenhouse & Lever boards for direct auto-apply ----
 companies:
-  greenhouse: []
-  lever: []
+  greenhouse:
+    # --- Quant, HFT & Trading Firms ---
+    - "towerresearchcapital"      # Tower Research Capital (Gurugram & GIFT City)
+    - "gravitonresearchcapital"   # Graviton Research Capital (Gurugram & GIFT City)
+    - "databento"
+    - "ninjatrader"
+    - "axq"
 
-# ---- How much full processing happens per run ----
-# Discovery can easily surface 500+ raw matches on a broad search
-# (which is realistic — you can't personally review/apply to that many
-# in a day anyway). Every new job still gets logged either way, but
-# only the top-scoring `max_prepare_per_run` get the expensive
-# treatment: ATS detection (a network call per job) and resume
-# tailoring (a Gemini call per job below the ATS threshold). This is
-# what keeps each run fast and safely inside Gemini's free-tier rate
-# limit, no matter how many postings a broad search happens to find.
-# Raise it once you've confirmed a comfortable run time.
+    # --- Top Global Tech & Cloud Infrastructure MNCs ---
+    - "stripe"
+    - "databricks"
+    - "cloudflare"
+    - "rubrik"
+    - "gitlab"
+    - "elastic"
+    - "datadog"
+    - "mongodb"
+    - "couchbase"
+    - "snowflake"
+    - "twilio"
+    - "samsara"
+    - "okta"
+    - "confluent"
+    - "hashicorp"
+    - "tanium"
+    - "snyk"
+    - "wiz"
+    - "netskope"
+    - "sentinelone"
+    - "lacework"
+    - "dremio"
+    - "cockroachlabs"
+    - "yugabyte"
+    - "starburst"
+    - "astronomer"
+    - "dbtlabs"
+    - "fivetran"
+    - "hightouch"
+    - "census"
+    - "mixpanel"
+    - "amplitude"
+    - "braze"
+    - "segment"
+    - "castai"
+    - "pagerduty"
+    - "newrelic"
+    - "box"
+    - "dropbox"
+    - "fastly"
+    - "sumologic"
+    - "qualys"
+    - "zscaler"
+
+    # --- Indian Tech Unicorns & Product Giants ---
+    - "phonepe"
+    - "razorpay"
+    - "postman"
+    - "browserstack"
+    - "inmobi"
+    - "sprinklr"
+    - "innovaccer"
+    - "chargebee"
+    - "freshworks"
+    - "clevertap"
+    - "moengage"
+    - "yellowai"
+    - "haptik"
+    - "gupshup"
+    - "myntra"
+    - "thoughtspot"
+    - "druva"
+    - "leadsquared"
+    - "darwinbox"
+    - "juspay"
+    - "devrev"
+    - "speechify"
+    - "airmeet"
+    - "hasura"
+    - "atlan"
+    - "appsmith"
+    - "signeasy"
+    - "whatfix"
+    - "highradius"
+    - "uniphore"
+    - "zenoti"
+    - "mindtickle"
+    - "greyorange"
+    - "wingify"
+    - "capillarytechnologies"
+    - "entytle"
+    - "koreai"
+    - "fractal"
+    - "musigma"
+    - "tigeranalytics"
+
+    # --- Global Fintech, Crypto & SaaS ---
+    - "coinbase"
+    - "robinhood"
+    - "plaid"
+    - "brex"
+    - "ramp"
+    - "rippling"
+    - "gusto"
+    - "carta"
+    - "affirm"
+    - "chime"
+    - "deel"
+    - "remote"
+    - "oyster"
+    - "bitgo"
+    - "fireblocks"
+    - "chainalysis"
+    - "circle"
+    - "alchemy"
+    - "consensys"
+    - "kraken"
+    - "vanta"
+    - "drata"
+    - "checkr"
+    - "lattice"
+    - "cultureamp"
+    - "figma"
+    - "canva"
+    - "airtable"
+    - "asana"
+    - "notion"
+    - "miro"
+    - "lucid"
+    - "webflow"
+    - "zapier"
+    - "retool"
+    - "superhuman"
+    - "linear"
+    - "intercom"
+    - "frontapp"
+    - "aircall"
+    - "duolingo"
+    - "instacart"
+    - "doordash"
+    - "automatticcareers"
+    - "reddit"
+    - "thetradedesk"
+    - "klaviyo"
+    - "supplyhouse"
+
+  lever:
+    # --- Top Product Unicorns & Tech Firms on Lever ---
+    - "meesho"
+    - "hotstar"
+    - "cleartax"
+    - "urbancompany"
+    - "palantir"
+    - "atlassian"
+    - "cred"
+    - "groww"
+    - "cars24"
+    - "spinny"
+    - "khatabook"
+    - "shadowfax"
+    - "bharatpe"
+    - "mpl"
+    - "cuemath"
+    - "curefit"
+    - "zeta"
+    - "pocketaces"
+    - "loco"
+    - "mediaocean"
+    - "rocketlane"
+    - "mygate"
+    - "everbridge"
+    - "benchling"
+    - "marqeta"
+    - "modern-treasury"
+    - "mux"
+    - "nerdwallet"
+    - "outreach"
+    - "sourcegraph"
+    - "wealthfront"
+    - "quora"
+    - "medium"
+    - "eventbrite"
+    - "coursera"
+    - "udemy"
+    - "spotify"
+    - "lyft"
+    - "ironcladapp"
+    - "15five"
+    - "field-ai"
+    - "ambrook"
+    - "trellis"
+
+# ---- Processing budget ----
 pipeline:
   max_prepare_per_run: 40
 
-# ---- Auto-apply: Greenhouse & Lever ONLY, dry-run by default ----
-# These are the only two ATSs this pipeline submits to directly — no
-# personal login required, no account-ban risk. LinkedIn/Naukri/
-# Wellfound/Workday/company sites are NOT auto-submitted; see README
-# for why and what the alternative is.
-#
-# dry_run: true fills the form and screenshots it (applications/
-# screenshots/) but NEVER clicks Submit — filling a form has zero
-# effect on the employer's side. Review several real screenshots
-# before ever setting this to false. Even with dry_run: false, a
-# required field the bot couldn't fill, or a resume that failed to
-# attach, blocks submission outright — this is checked live against
-# the page, not assumed.
+# ---- Auto-apply configuration ----
 apply:
   enabled: true
   dry_run: true
@@ -122,6 +265,6 @@ apply:
     first_name: "Vedang"
     last_name: "Trivedi"
     full_name: "Vedang Trivedi"
-    email: "vedangtrivediworks@gmail.com"
-    phone: ""                                    # fill in your number
+    email: "vedangtrivediwork@gmail.com"
+    phone: ""                                        # Remember to add your phone number with country code (+91)
     linkedin_url: "https://www.linkedin.com/in/vedang-trivedi-0389a91b9"
