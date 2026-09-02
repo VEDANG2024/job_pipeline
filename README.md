@@ -191,6 +191,13 @@ Edit `config.yaml`:
   aliases, ATS tailoring threshold.
 - `resumes` — paths to your two resumes (already pointed at the ones
   in `resumes/`).
+- `tailoring.enabled` — **off by default.** Resume choice is a fast,
+  free, local comparison (score the JD against both resumes, use
+  whichever fits better) — no API call, so applying never waits on
+  Gemini being available. Turn this on only if you want Gemini to
+  rewrite the chosen resume on top of that when the fit score is low;
+  given the free-tier quota already hit in production once, off is the
+  more reliable default.
 - `companies.greenhouse` / `companies.lever` — **optional, leave empty.**
   Only fill this in if you want to explicitly pin a specific company
   for guaranteed coverage regardless of whether Adzuna/LinkedIn happen

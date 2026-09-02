@@ -13,7 +13,22 @@ filters:
   internship_min_stipend_inr: 30000
   priority_location: "Ahmedabad"    # always swept in, regardless of other filters
   priority_location_aliases: ["ahmedabad", "amdavad", "ahmadabad"]
-  ats_tailor_threshold: 85          # below this score, tailor.py kicks in
+  ats_tailor_threshold: 85          # only used if tailoring.enabled below is true
+
+# ---- Resume tailoring — OFF by default ----
+# Resume CHOICE always happens regardless of this setting: every job
+# is scored against both resumes (a fast, free, local keyword
+# comparison, no API call) and whichever fits better is used. This
+# setting only controls an OPTIONAL extra step on top of that: if
+# true, and a job's fit score is below filters.ats_tailor_threshold,
+# Gemini rewrites the chosen resume's wording/emphasis to better match
+# the JD. Off by default because applying should never wait on Gemini
+# being available — the free-tier quota has already been exhausted in
+# production once. If tailoring is on and it fails or the budget is
+# spent, the pipeline falls back to the already-chosen base resume and
+# keeps going — it never blocks the apply step either way.
+tailoring:
+  enabled: false
 
 # ---- Adzuna: PRIMARY discovery engine — NO company list needed ----
 # Adzuna aggregates postings from 30+ sources (Workday, Indeed,
