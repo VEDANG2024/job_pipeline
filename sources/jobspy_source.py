@@ -27,11 +27,32 @@ def fetch(search_term: str, locations: list, sites: list,
 
     all_jobs = []
     for location in locations:
+        # "Remote" isn't a real place. jobspy's Glassdoor scraper looks up
+        # whatever string you pass as `location` against its own location
+        # database (jobspy/glassdoor/__init__.py:_get_location) and fails
+        # with "location not parsed" for "Remote" — but that same function
+        # skips the lookup entirely when is_remote=True, so passing it
+        # properly (location=None, is_remote=True) fixes Glassdoor.
+        #
+        # Separately, the "Invalid country string: 'namibia'" crash seen
+        # in logs is NOT caused by anything we pass in — it's LinkedIn's
+        # own per-listing location parser (jobspy/linkedin/__init__.py:
+        # _get_location) choking whenever a scraped posting's own location
+        # text names a country outside jobspy's fixed ~70-country list
+        # (Namibia isn't one of them). It can happen on any query, "Remote"
+        # or not, whenever a matching posting happens to be based there,
+        # and there's no config-side fix — it's an unpatched jobspy
+        # limitation. Already handled as gracefully as it can be here: the
+        # try/except below means that one location's results are skipped
+        # for this run rather than crashing the whole pipeline.
+        is_remote = location.strip().lower() == "remote"
+        query_location = None if is_remote else location
         try:
             df = scrape_jobs(
                 site_name=sites,
                 search_term=search_term,
-                location=location,
+                location=query_location,
+                is_remote=is_remote,
                 results_wanted=results_wanted,
                 hours_old=hours_old,
                 country_indeed="India",

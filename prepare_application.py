@@ -40,17 +40,42 @@ def _slug(text: str) -> str:
 def _pick_best_resume(job: dict, cfg: dict) -> tuple:
     """Scores the JD against both resumes and returns
     (role, resume_pdf_path, ats_score_result) for whichever fits
-    better. No tailoring, no API call — always succeeds."""
+    better. No tailoring, no API call — always succeeds.
+
+    The raw ATS keyword score ties constantly (most often at the flat
+    70.0 "low signal" score returned when a JD's text doesn't hit any
+    taxonomy keyword at all — common with mangled/terse descriptions,
+    and identical for both resumes since it doesn't even look at
+    resume content in that case). A plain ">" comparison on a tie
+    always fell through to "analyst" since it's checked first in the
+    loop, which silently sent the Analyst resume to a large share of
+    postings classify.py itself had already tagged "swe" from the
+    title/keywords.
+
+    Fix: trust classify.py's title/keyword classification (role_category)
+    as the primary signal — it's already reliable — and only let the
+    ATS content score override it when the OTHER resume clearly fits
+    better by a real margin, not a tie. Postings classify.py couldn't
+    categorize ("other") fall back to pure content-score comparison."""
     jd_text = job.get("description", "")
-    best = None
+    scores = {}
     for role in ("analyst", "swe"):
         resume_cfg = cfg["resumes"][role]
         tex_path = os.path.join(BASE_DIR, resume_cfg["tex"])
         resume_text = flatten_file(tex_path)
-        result = ats_score.score_jd_vs_resume(jd_text, resume_text)
-        if best is None or result["score"] > best[2]["score"]:
-            best = (role, os.path.join(BASE_DIR, resume_cfg["pdf"]), result)
-    return best
+        scores[role] = ats_score.score_jd_vs_resume(jd_text, resume_text)
+
+    classified = job.get("role_category")
+    margin = cfg["filters"].get("resume_override_margin", 15)
+
+    if classified in ("analyst", "swe"):
+        other = "swe" if classified == "analyst" else "analyst"
+        best_role = other if scores[other]["score"] > scores[classified]["score"] + margin else classified
+    else:
+        best_role = max(scores, key=lambda r: scores[r]["score"])
+
+    resume_cfg = cfg["resumes"][best_role]
+    return best_role, os.path.join(BASE_DIR, resume_cfg["pdf"]), scores[best_role]
 
 
 def _maybe_tailor(job: dict, cfg: dict, role: str, resume_file: str, result: dict) -> tuple:
@@ -148,7 +173,7 @@ def prepare(job: dict, cfg: dict) -> dict:
         "date": date.today().isoformat(),
         "company": job["company"],
         "role_title": job["title"],
-        "role_category": role,
+        "role_category": job.get("role_category", ""),
         "location": job.get("location", ""),
         "source": job.get("source", ""),
         "ats": job.get("ats", ""),

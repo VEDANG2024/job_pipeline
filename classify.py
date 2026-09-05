@@ -23,6 +23,18 @@ SWE_KEYWORDS = [
 
 INTERNSHIP_KEYWORDS = ["intern", "internship", "trainee"]
 
+# parse_experience() below defaults unspecified-years JDs to (0, 2) —
+# entry-friendly — on the assumption a real years figure would be stated
+# otherwise. Senior/manager/director postings routinely DON'T state a bare
+# "X years" figure at all (seniority is signaled by title and scope
+# instead), which let plenty of them slip through as if they were 0-2 yr
+# roles. This list catches what the years-regex can't.
+SENIOR_TITLE_KEYWORDS = [
+    "senior", "sr.", "sr ", "staff", "principal", "director", "head of",
+    "vice president", " vp ", "chief", "architect", "manager",
+    "tech lead", "team lead", "president",
+]
+
 YEARS_PATTERNS = [
     re.compile(r"(\d+)\s*[-\u2013to]+\s*(\d+)\s*\+?\s*years?", re.I),
     re.compile(r"(\d+)\s*\+\s*years?", re.I),
@@ -100,6 +112,16 @@ def score_and_filter(job: dict, cfg: dict) -> dict:
     # Soft filter: experience band. Ahmedabad postings bypass this —
     # flagged for manual review instead of being dropped.
     if years_min > filters["max_years_experience"]:
+        if loc_priority == "ahmedabad":
+            mandatory_review = True
+        else:
+            passes = False
+
+    # Soft filter: senior/manager/director titles. Same bypass pattern —
+    # catches the case above where years weren't stated at all, so the
+    # (0, 2) fallback would otherwise have waved these through.
+    title_text = f" {s(job['title']).lower()} "
+    if any(k in title_text for k in SENIOR_TITLE_KEYWORDS):
         if loc_priority == "ahmedabad":
             mandatory_review = True
         else:

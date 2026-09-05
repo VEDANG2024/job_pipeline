@@ -121,7 +121,24 @@ def main():
     new_jobs.sort(key=lambda j: (-j["mandatory_review"], -j["score"]))
 
     cap = cfg.get("pipeline", {}).get("max_prepare_per_run", 40)
-    to_prepare, to_log_only = new_jobs[:cap], new_jobs[cap:]
+
+    # Ahmedabad-mandatory postings are correctly never dropped, but sorted
+    # purely by (mandatory_review, score) they also dominate day-to-day
+    # volume and can permanently crowd Greenhouse/Lever postings out of
+    # the cap entirely — the ONLY two ATSs this pipeline can auto-submit
+    # to. Reserve a slice of the cap for Greenhouse/Lever specifically so
+    # auto-apply always gets a shot, without taking anything away from
+    # Ahmedabad coverage (which still gets the rest of the cap to itself).
+    gh_lever_reserve = min(
+        cfg.get("pipeline", {}).get("gh_lever_reserve", 10), cap)
+    gh_lever_first = [j for j in new_jobs if j["source"] in ("greenhouse", "lever")]
+    reserved = gh_lever_first[:gh_lever_reserve]
+    reserved_ids = {id(j) for j in reserved}
+    leftover = [j for j in new_jobs if id(j) not in reserved_ids]
+
+    to_prepare = reserved + leftover[:max(cap - len(reserved), 0)]
+    prepare_ids = {id(j) for j in to_prepare}
+    to_log_only = [j for j in new_jobs if id(j) not in prepare_ids]
 
     if to_log_only:
         print(f"{len(new_jobs)} NEW postings — fully processing the top {len(to_prepare)} "

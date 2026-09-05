@@ -14,6 +14,9 @@ filters:
   priority_location: "Ahmedabad"    # always swept in, regardless of other filters
   priority_location_aliases: ["ahmedabad", "amdavad", "ahmadabad"]
   ats_tailor_threshold: 85          # only used if tailoring.enabled below is true
+  resume_override_margin: 15        # best-fit resume pick: trust classify.py's title/keyword
+                                      # role over the raw ATS content score unless the OTHER
+                                      # resume beats it by more than this many points
 
 # ---- Resume tailoring — OFF by default ----
 tailoring:
@@ -44,10 +47,14 @@ remote_boards:
   remoteok: true
   weworkremotely:
     - "remote-programming-jobs"
-    - "remote-Business Analyst-jobs"
-    - "remote-Data Analyst-jobs"
-    - "remote-Analyst-jobs"
     - "remote-business-development-jobs"
+    # WWR has no dedicated "Analyst" category — these three slugs were
+    # invented and don't exist (two even had spaces in them, which broke
+    # the RSS URL outright: "URL can't contain control characters").
+    # Confirmed via WWR's real category nav: analyst-type roles fit best
+    # under "Management and Finance"; "All Other" is a valid fallback but
+    # is a noisy catch-all (data entry, virtual assistants, etc. mixed in).
+    - "remote-management-and-finance-jobs"
 
 # ---- Direct board search — LinkedIn / Indeed / Glassdoor / Naukri / Google ----
 jobspy:
@@ -256,6 +263,9 @@ companies:
 # ---- Processing budget ----
 pipeline:
   max_prepare_per_run: 40
+  gh_lever_reserve: 10        # slots within the cap above guaranteed to
+                              # Greenhouse/Lever postings specifically —
+                              # see main.py for why this exists
 
 # ---- Auto-apply configuration ----
 apply:
