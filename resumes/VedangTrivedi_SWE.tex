@@ -1,6 +1,5 @@
 \documentclass[letterpaper,10pt]{article}
 
-\usepackage{fontawesome5}
 \usepackage{hyperref}
 \hypersetup{
     colorlinks=true,
@@ -23,7 +22,6 @@
 \usepackage{graphicx}
 \usepackage{mwe}
 \usepackage{wrapfig}
-\usepackage{tabularx}
 \usepackage{changepage}
 \usepackage{comment}
 
@@ -63,11 +61,10 @@
 }
 
 \newcommand{\resumeSubheading}[4]{
-  \vspace{4pt}\item 
-    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
-      \textbf{\small #1} & \footnotesize #2 \\ 
-      \textit{\scriptsize#3} & \textit{\scriptsize #4} \\ 
-    \end{tabular*}\vspace{-5pt}
+  \vspace{3pt}\item
+    \textbf{\small #1} \hfill \footnotesize #2 \\
+    \textit{\scriptsize#3} \hfill \textit{\scriptsize #4} \\
+  \vspace{-5pt}
 }
 
 \newlength{\skillhang}
@@ -84,17 +81,15 @@
 
 \newcommand{\resumeSubSubheading}[2]{
     \item
-    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
-      \textit{\footnotesize#1} & \textit{\footnotesize #2} \\
-    \end{tabular*}\vspace{-8pt}
+    \textit{\footnotesize#1} \hfill \textit{\footnotesize #2} \\
+    \vspace{-8pt}
 }
 
 \newcommand{\resumeProjectHeading}[2]{
-    \vspace{4pt}
+    \vspace{3pt}
     \item
-    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
-      \footnotesize#1 & \footnotesize#2 \\
-    \end{tabular*}\vspace{-3pt}
+    \footnotesize#1 \hfill \footnotesize#2 \\
+    \vspace{-3pt}
 }
 
 \newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-3pt}}
@@ -104,10 +99,7 @@
 \newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.1in, label={}]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
 \newcommand{\resumeItemListStart}{\vspace{3pt}\begin{itemize}}
-\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
-
-\definecolor{Black}{RGB}{0, 0, 0}
-\newcommand{\seticon}[1]{\textcolor{Black}{\csname #1\endcsname}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-7pt}}
 
 %-------------------------------------------%
 %%%%%%  RESUME STARTS HERE  %%%%%
@@ -116,10 +108,10 @@
 \begin{center}
     \textbf{\large VEDANG TRIVEDI} \\[0.15em]
     \textit{\footnotesize Software Engineer $\vert$ Data Engineer $\vert$ Distributed Systems, Python \& ML Systems} \\[0.15em]
-    \href{mailto:trivedivedang.02@gmail.com}{\seticon{faEnvelope} \underline{\footnotesize trivedivedang.02@gmail.com}} \quad
-    \href{https://www.linkedin.com/in/vedang-trivedi-0389a91b9}{\seticon{faLinkedin} \underline{\footnotesize linkedin.com/in/vedang-trivedi-0389a91b9}} \\[0.15em]
-    \href{https://www.github.com/VEDANG2024}{\seticon{faGithub} \underline{\footnotesize github.com/VEDANG2024}} \quad
-    \seticon{faMapMarker} \footnotesize Ahmedabad, Gujarat, India
+    \href{mailto:trivedivedang.02@gmail.com}{\underline{\footnotesize trivedivedang.02@gmail.com}} \quad $|$ \quad
+    \href{https://www.linkedin.com/in/vedang-trivedi-0389a91b9}{\underline{\footnotesize linkedin.com/in/vedang-trivedi-0389a91b9}} \\[0.15em]
+    \href{https://www.github.com/VEDANG2024}{\underline{\footnotesize github.com/VEDANG2024}} \quad $|$ \quad
+    \footnotesize Ahmedabad, Gujarat, India
 \end{center}
 \vspace{-0.3em}
 
@@ -167,7 +159,7 @@ Software Engineer and Data Engineer with expertise in software engineering, dist
 
     \resumeProjectHeading
     {\textbf{UGAD-Lite: Uncertainty-Guided Adaptive Distillation} $|$ \emph{ML Systems}}
-    {\href{https://github.com/VEDANG2024/UGAD_major}{\faGithub}}
+    {\href{https://github.com/VEDANG2024/UGAD_major}{\underline{\footnotesize GitHub}}}
     \resumeItemListStart
         \resumeItem{Engineered an entropy-conformal router that dynamically directs queries between a large LLM (GPT-4o) and a fine-tuned Small Language Model (Phi-3-Mini via QLoRA), calibrated with conformal prediction for statistical safety guarantees.}
         \resumeItem{Cut LLM inference cost and token usage by 78\% at a 94.8\% task success rate on GSM8K and synthetic arithmetic benchmarks, with a $<$5\% false-negative rate.}
@@ -175,7 +167,7 @@ Software Engineer and Data Engineer with expertise in software engineering, dist
 
     \resumeProjectHeading
     {\textbf{CardEst} $|$ \emph{SQL, Query Optimization}}
-    {\href{https://github.com/VEDANG2024/ddb-project}{\faGithub}}
+    {\href{https://github.com/VEDANG2024/ddb-project}{\underline{\footnotesize GitHub}}}
     \resumeItemListStart
         \resumeItem{Built an XGBoost-based cardinality estimator trained on the TPC-H dataset to improve query-optimizer execution-plan accuracy.}
         \resumeItem{Cut query latency and resource usage in 70\% of evaluated cases by improving Pearson correlation and reducing median estimation error.}
@@ -183,14 +175,14 @@ Software Engineer and Data Engineer with expertise in software engineering, dist
 
     \resumeProjectHeading
     {\textbf{Raft Census (DBFS)} $|$ \emph{Distributed Systems, Raft Consensus}}
-    {\href{https://www.github.com/VEDANG2024/ds-project}{\faGithub}}
+    {\href{https://www.github.com/VEDANG2024/ds-project}{\underline{\footnotesize GitHub}}}
     \resumeItemListStart
         \resumeItem{Built a language-agnostic, decentralized file-storage system using Raft cluster consensus (Redis + MongoDB-backed), with work-stealing task distribution to support concurrent multi-client create/read/write/delete operations with efficient search and caching.}
     \resumeItemListEnd
 
     \resumeProjectHeading
     {\textbf{UML2PlantUML} $|$ \emph{LLMs, Machine Learning}}
-    {\href{https://github.com/VEDANG2024/UML2PlantUML}{\faGithub}}
+    {\href{https://github.com/VEDANG2024/UML2PlantUML}{\underline{\footnotesize GitHub}}}
     \resumeItemListStart
         \resumeItem{Built a small-scale, local reproduction of the approach from Sadeghi et al. (MODELS 2026, arXiv:2607.28987) for handwritten UML-to-PlantUML generation, preprocessing a dataset of activity and sequence diagram images for model training.}
         \resumeItem{Fine-tuned and benchmarked 7 vision-language models (ViT-BART, BLIP, Flan-T5, ViT-GPT2, Pix2Struct, CLIP, MiniCPM) to generate PlantUML code from class diagram images, and deployed the trained model on Kaggle, where it has drawn numerous downloads.}
@@ -198,7 +190,7 @@ Software Engineer and Data Engineer with expertise in software engineering, dist
 
     \resumeProjectHeading
     {\textbf{Distributed Database System} $|$ \emph{2PC, Query Optimization}}
-    {\href{https://github.com/VEDANG2024/ddb-project}{\faGithub}}
+    {\href{https://github.com/VEDANG2024/ddb-project}{\underline{\footnotesize GitHub}}}
     \resumeItemListStart
         \resumeItem{Engineered a distributed database with a coordinator-worker topology, implementing horizontal/vertical data fragmentation and a global data dictionary for location-transparent query routing.}
         \resumeItem{Implemented Two-Phase Commit (2PC) for multi-node transaction atomicity and semi-join query optimization, cutting cross-node bandwidth by 60--70\% and query latency by 3--4x versus centralized execution.}

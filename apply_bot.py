@@ -40,7 +40,26 @@ FIELD_LABELS = {
     "email": ["email"],
     "phone": ["phone"],
     "linkedin": ["linkedin"],
+    "location": ["location", "city"],
 }
+
+# Country is almost always a <select> on Greenhouse/Lever, not a text
+# input — needs select_option(label=...), handled separately below.
+SELECT_FIELD_LABELS = {
+    "country": ["country"],
+}
+
+# Required checkboxes whose label matches one of these are a standard,
+# non-judgment consent step every real application needs (privacy
+# policy / terms acknowledgment) — safe to auto-check. Anything else
+# (EEO/self-ID questions, sponsorship, relocation, "how did you hear
+# about us") is left alone deliberately: those need the applicant's
+# actual answer, not a guess, and stay in unfilled_required_fields so
+# the safety block below continues to hold the submission for a human.
+CONSENT_CHECKBOX_PATTERNS = [
+    r"acknowledge", r"privacy policy", r"consent", r"agree to the",
+    r"terms of (service|use)",
+]
 
 
 def _slug(text: str) -> str:
@@ -57,6 +76,50 @@ def _try_fill_by_label(page, label_patterns, value) -> bool:
         except Exception:
             continue
     return False
+
+
+def _try_select_by_label(page, label_patterns, value) -> bool:
+    """For <select> fields (e.g. Country). Matches the option by its
+    visible text, not by value/index, since those vary per company."""
+    for pattern in label_patterns:
+        try:
+            locator = page.get_by_label(re.compile(pattern, re.I))
+            if locator.count() > 0 and locator.first.is_visible():
+                locator.first.select_option(label=value)
+                return True
+        except Exception:
+            continue
+    return False
+
+
+def _check_consent_checkboxes(page) -> list:
+    """Checks required checkboxes that are a standard consent step
+    (privacy policy / terms acknowledgment) — see CONSENT_CHECKBOX_PATTERNS
+    for exactly what qualifies. Returns the labels actually checked."""
+    checked = []
+    try:
+        boxes = page.locator("input[type='checkbox'][required]")
+        for i in range(boxes.count()):
+            box = boxes.nth(i)
+            try:
+                if box.is_checked():
+                    continue
+                label_text = ""
+                label_id = box.get_attribute("id")
+                if label_id:
+                    lbl = page.locator(f"label[for='{label_id}']")
+                    if lbl.count() > 0:
+                        label_text = lbl.first.inner_text()
+                if not label_text:
+                    label_text = box.get_attribute("aria-label") or ""
+                if any(re.search(p, label_text, re.I) for p in CONSENT_CHECKBOX_PATTERNS):
+                    box.check()
+                    checked.append(label_text.strip()[:80])
+            except Exception:
+                continue
+    except Exception:
+        pass
+    return checked
 
 
 def _find_file_input(page):
@@ -118,6 +181,13 @@ def fill_application(page, job: dict, resume_path: str, applicant: dict,
     do_fill("email", applicant.get("email"))
     do_fill("phone", applicant.get("phone"))
     do_fill("linkedin", applicant.get("linkedin_url"))
+    do_fill("location", applicant.get("city"))
+
+    if applicant.get("country") and _try_select_by_label(
+            page, SELECT_FIELD_LABELS["country"], applicant["country"]):
+        filled["country"] = applicant["country"]
+
+    consent_checked = _check_consent_checkboxes(page)
 
     resume_uploaded = False
     file_input = _find_file_input(page)
@@ -154,6 +224,7 @@ def fill_application(page, job: dict, resume_path: str, applicant: dict,
     return {
         "fields_filled": sorted(filled.keys()),
         "resume_uploaded": resume_uploaded,
+        "consent_checkboxes_checked": consent_checked,
         "unfilled_required_fields": unfilled_required,
         "screenshot": shot_path,
         "dry_run": dry_run,

@@ -1,6 +1,5 @@
 \documentclass[letterpaper,10pt]{article}
 
-\usepackage{fontawesome5}
 \usepackage{hyperref}
 \hypersetup{
     colorlinks=true,
@@ -23,7 +22,6 @@
 \usepackage{graphicx}
 \usepackage{mwe}
 \usepackage{wrapfig}
-\usepackage{tabularx}
 \usepackage{changepage}
 \usepackage{comment}
 
@@ -63,11 +61,10 @@
 }
 
 \newcommand{\resumeSubheading}[4]{
-  \vspace{5pt}\item 
-    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
-      \textbf{\small #1} & \footnotesize #2 \\ 
-      \textit{\scriptsize#3} & \textit{\scriptsize #4} \\ 
-    \end{tabular*}\vspace{-3pt}
+  \vspace{5pt}\item
+    \textbf{\small #1} \hfill \footnotesize #2 \\
+    \textit{\scriptsize#3} \hfill \textit{\scriptsize #4} \\
+  \vspace{-3pt}
 }
 
 \newcommand{\listOfSkills}[2]{
@@ -82,17 +79,15 @@
 
 \newcommand{\resumeSubSubheading}[2]{
     \item
-    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
-      \textit{\footnotesize#1} & \textit{\footnotesize #2} \\
-    \end{tabular*}\vspace{-8pt}
+    \textit{\footnotesize#1} \hfill \textit{\footnotesize #2} \\
+    \vspace{-8pt}
 }
 
 \newcommand{\resumeProjectHeading}[2]{
     \vspace{5pt}
     \item
-    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
-      \footnotesize#1 & \footnotesize#2 \\
-    \end{tabular*}\vspace{-3pt}
+    \footnotesize#1 \hfill \footnotesize#2 \\
+    \vspace{-3pt}
 }
 
 \newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-3pt}}
@@ -104,9 +99,6 @@
 \newcommand{\resumeItemListStart}{\vspace{3pt}\begin{itemize}}
 \newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
 
-\definecolor{Black}{RGB}{0, 0, 0}
-\newcommand{\seticon}[1]{\textcolor{Black}{\csname #1\endcsname}}
-
 %-------------------------------------------%
 %%%%%%  RESUME STARTS HERE  %%%%%
 
@@ -114,10 +106,10 @@
 \begin{center}
     \textbf{\large VEDANG TRIVEDI} \\[0.15em]
     \textit{\footnotesize Business Analyst $\vert$ Data Analyst $\vert$ Process Automation} \\[0.15em]
-    \href{mailto:trivedivedang.02@gmail.com}{\seticon{faEnvelope} \underline{\footnotesize trivedivedang.02@gmail.com}} \quad
-    \href{https://www.linkedin.com/in/vedang-trivedi-0389a91b9}{\seticon{faLinkedin} \underline{\footnotesize linkedin.com/in/vedang-trivedi-0389a91b9}} \\[0.15em]
-    \href{https://www.github.com/VEDANG2024}{\seticon{faGithub} \underline{\footnotesize github.com/VEDANG2024}} \quad
-    \seticon{faMapMarker} \footnotesize Ahmedabad, Gujarat, India
+    \href{mailto:trivedivedang.02@gmail.com}{\underline{\footnotesize trivedivedang.02@gmail.com}} \quad $|$ \quad
+    \href{https://www.linkedin.com/in/vedang-trivedi-0389a91b9}{\underline{\footnotesize linkedin.com/in/vedang-trivedi-0389a91b9}} \\[0.15em]
+    \href{https://www.github.com/VEDANG2024}{\underline{\footnotesize github.com/VEDANG2024}} \quad $|$ \quad
+    \footnotesize Ahmedabad, Gujarat, India
 \end{center}
 \vspace{-0.3em}
 
@@ -171,21 +163,21 @@ Business Analyst and Data Analyst with hands-on experience in requirements gathe
 
     \resumeProjectHeading
     {\textbf{CardEst} $|$ \emph{SQL, Query Optimization}}
-    {\href{https://github.com/VEDANG2024/ddb-project}{\faGithub}}
+    {\href{https://github.com/VEDANG2024/ddb-project}{\underline{\footnotesize GitHub}}}
     \resumeItemListStart
         \resumeItem{Trained a meta-ensemble model (primarily XGBoost) on the TPC-H dataset to estimate query-predicate cardinality, improving Pearson correlation and cutting query latency/resource usage in \textbf{70\%} of evaluated cases.}
     \resumeItemListEnd
 
     \resumeProjectHeading
     {\textbf{Hybrid Stock Market Price Prediction} $|$ \emph{Data Analytics, NLP} -- \emph{team project}}
-    {\href{https://github.com/VEDANG2024/STOCK-MARKET-ML/tree/main/Stock-Market-Prediction-main}{\faGithub}}
+    {\href{https://github.com/VEDANG2024/STOCK-MARKET-ML/tree/main/Stock-Market-Prediction-main}{\underline{\footnotesize GitHub}}}
     \resumeItemListStart
         \resumeItem{Led planning and data infrastructure for a 3-person team, building an InfluxDB/Grafana pipeline and Streamlit/Flask apps combining numerical forecasting with NLTK/spaCy news-sentiment analysis.}
     \resumeItemListEnd
 
     \resumeProjectHeading
     {\textbf{ERP Dashboard} $|$ \emph{React.js, Dashboard Development}}
-    {\href{https://github.com/VEDANG2024/erp-master}{\faGithub}}
+    {\href{https://github.com/VEDANG2024/erp-master}{\underline{\footnotesize GitHub}}}
     \resumeItemListStart
         \resumeItem{Built a simplified ERP dashboard (React.js) covering revenue/profit/traffic metrics and sales trend charts, with full-CRUD Products/Orders management modules across desktop and mobile.}
     \resumeItemListEnd

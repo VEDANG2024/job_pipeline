@@ -22,10 +22,12 @@ APPLICANT = {
     "first_name": "Vedang", "last_name": "Trivedi", "full_name": "Vedang Trivedi",
     "email": "vedangtrivediworks@gmail.com", "phone": "9999999999",
     "linkedin_url": "https://www.linkedin.com/in/vedang-trivedi-0389a91b9",
+    "country": "India", "city": "Ahmedabad",
 }
 
 GH_FIXTURE = "file://" + os.path.abspath("tests/fixtures/greenhouse_like.html")
 LEVER_FIXTURE = "file://" + os.path.abspath("tests/fixtures/lever_like.html")
+GH_FULL_FIXTURE = "file://" + os.path.abspath("tests/fixtures/greenhouse_full.html")
 
 
 def run(fixture_url, resume, dry_run):
@@ -72,5 +74,26 @@ assert r["resume_uploaded"] is False
 assert r["ready_to_submit"] is False
 assert r["submitted"] is False
 print("5. Missing resume file: submission blocked regardless of dry_run — OK")
+
+print("\nAll apply_bot safety checks passed.")
+
+# 6. Full Greenhouse-style form (mirrors the real Cloudflare screenshot):
+#    Country <select>, Location text field, and a required privacy-policy
+#    consent checkbox all get handled correctly now.
+r = run(GH_FULL_FIXTURE, "resumes/VedangTrivedi_SWE.pdf", dry_run=True)
+assert "location" in r["fields_filled"]
+assert "country" in r["fields_filled"]
+assert r["consent_checkboxes_checked"], "expected the privacy-policy checkbox to be checked"
+assert r["submitted"] is False  # dry_run=True still never submits
+print("6. Full form: country/location filled, consent checkbox checked — OK")
+
+# 7. Same full form, but it also has a "How did you hear about this job?"
+#    text field this bot deliberately never guesses at -> must still
+#    block submission even though everything else is now handled.
+r = run(GH_FULL_FIXTURE, "resumes/VedangTrivedi_SWE.pdf", dry_run=False)
+assert "how_heard" in r["unfilled_required_fields"]
+assert r["ready_to_submit"] is False
+assert r["submitted"] is False
+print("7. Full form, one genuinely unanswerable field: submission still blocked — OK")
 
 print("\nAll apply_bot safety checks passed.")

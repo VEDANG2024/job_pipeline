@@ -278,3 +278,5 @@ apply:
     email: "vedangtrivediwork@gmail.com"
     phone: ""                                        # Remember to add your phone number with country code (+91)
     linkedin_url: "https://www.linkedin.com/in/vedang-trivedi-0389a91b9"
+    country: "India"                                 # matched against <select> option text — see apply_bot.py
+    city: "Ahmedabad"

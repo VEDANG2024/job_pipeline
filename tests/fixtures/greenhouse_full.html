@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html><body>
+<form id="application_form">
+  <label for="first_name">First Name*</label>
+  <input id="first_name" name="first_name" type="text" required>
+  <label for="last_name">Last Name*</label>
+  <input id="last_name" name="last_name" type="text" required>
+  <label for="email">Email*</label>
+  <input id="email" name="email" type="email" required>
+  <label for="phone">Phone*</label>
+  <input id="phone" name="phone" type="tel" required>
+  <label for="location">Location (City)*</label>
+  <input id="location" name="location" type="text" required>
+  <label for="country">Country*</label>
+  <select id="country" name="country" required>
+    <option value="">Select...</option>
+    <option value="in">India</option>
+    <option value="us">United States</option>
+  </select>
+  <label for="resume">Resume/CV*</label>
+  <input id="resume" name="resume" type="file" required>
+  <label for="urls_LinkedIn">LinkedIn Profile</label>
+  <input id="urls_LinkedIn" name="urls[LinkedIn]" type="text">
+  <!-- Deliberately unanswerable without a human: this should stay
+       in unfilled_required_fields and keep blocking submission. -->
+  <label for="how_heard">How did you hear about this job?*</label>
+  <input id="how_heard" name="how_heard" type="text" required>
+  <input id="privacy_consent" name="privacy_consent" type="checkbox" required>
+  <label for="privacy_consent">I acknowledge Cloudflare's Candidate Privacy Policy *</label>
+  <button type="submit" id="submit_app">Submit Application</button>
+</form>
+</body></html>
